@@ -1,0 +1,69 @@
+<style>
+    #scroll-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 48px;
+        height: 48px;
+        background-color: #0a0a0a; /* Matches your black-rich */
+        border: 2px solid #b79a64; /* Matches your gold */
+        color: #b79a64;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(20px);
+        border-radius: 4px; /* Slight roundness to match your UI style */
+    }
+
+    #scroll-top.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    #scroll-top:hover {
+        background-color: #b79a64;
+        color: #0a0a0a;
+        box-shadow: 0 0 20px rgba(183, 154, 100, 0.5);
+        transform: translateY(-5px);
+    }
+
+    @media (max-width: 768px) {
+        #scroll-top {
+            bottom: 80px; /* Increased to avoid covering developer credits */
+            right: 20px;
+            width: 42px;
+            height: 42px;
+        }
+    }
+</style>
+
+<button id="scroll-top" title="Back to Top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const scrollTopBtn = document.getElementById('scroll-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 400) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>

@@ -1,0 +1,542 @@
+{% load static %}  
+<!DOCTYPE html>
+<html lang="en" style="overflow-x: hidden;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %}Accra Business School | Redefining Business Education{% endblock %}</title>
+    
+    <link rel="icon" type="image/png" href="{% static 'images/absl.png' %}">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap');
+        :root { --ugc-gold: #b79a64; --ugc-black: #0a0a0a; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #ffffff; 
+            margin: 0; 
+            overflow-x: hidden; 
+            width: 100%; 
+            padding-top: 108px; /* Offset for the fixed header height */
+        }
+
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .bg-gold { background-color: var(--ugc-gold); }
+        .text-gold { color: var(--ugc-gold); }
+        .bg-black-rich { background-color: var(--ugc-black); }
+        
+        .nav-link:hover { color: var(--ugc-gold); }
+
+        /* GOLD ILLUMINATION LOGIC */
+        @keyframes shine {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .illuminate-gold {
+            background: linear-gradient(90deg, #C5A059, #f5e6ad, #C5A059);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+            text-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
+            display: inline-block;
+        }
+
+        /* FIXED: SMOOTH DROPDOWN LOGIC */
+        .dropdown-menu { 
+            display: block; 
+            position: absolute; 
+            background-color: transparent; 
+            min-width: 240px; 
+            z-index: 100;
+            top: 100%; 
+            left: 0;
+            padding-top: 10px; 
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        
+        .dropdown-group:hover .dropdown-menu { 
+            opacity: 1; 
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        
+        .dropdown-content {
+            background-color: #111111;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            border-top: 2px solid var(--ugc-gold);
+        }
+
+        .dropdown-item { transition: all 0.3s ease; color: #d1d5db; display: block; }
+        .dropdown-item:hover { color: var(--ugc-gold); background-color: rgba(183, 154, 100, 0.1); padding-left: 1.75rem; }
+
+        /* FIXED: Nested Dropdown opens LEFT to prevent being hidden */
+        .nested-dropdown { position: relative; }
+        .nested-menu {
+            position: absolute;
+            right: 100%; 
+            top: 0;
+            min-width: 260px;
+            background-color: #111111;
+            border-right: 2px solid var(--ugc-gold);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+        .nested-dropdown:hover .nested-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .social-btn { transition: all 0.4s ease; }
+        .social-btn:hover { 
+            background-color: var(--ugc-gold); 
+            color: black; 
+            box-shadow: 0 0 15px var(--ugc-gold); 
+            transform: translateY(-3px);
+        }
+
+        /* UPDATED: MOBILE MENU BEHAVIOR */
+        #mobile-menu {
+            position: absolute; 
+            top: 100%; 
+            left: 0;
+            width: 100%;
+            max-height: 0; 
+            background-color: var(--ugc-black);
+            z-index: 40;
+            transition: max-height 0.4s ease-in-out;
+            overflow: hidden; 
+            box-shadow: 0 10px 15px rgba(0,0,0,0.3);
+        }
+        #mobile-menu.active { 
+            max-height: 2000px; 
+        }
+
+        .mobile-submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background: rgba(255,255,255,0.03);
+        }
+        .mobile-submenu.open { max-height: 1000px; } 
+        
+        .rotate-arrow { transition: transform 0.3s ease; display: inline-block; }
+        .rotate-arrow.active { transform: rotate(180deg); }
+
+        @keyframes beat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        .animate-beat { display: inline-block; animation: beat 1s infinite; color: #ff0000; }
+
+        /* STICKY HEADER LOGIC */
+        .sticky-header { 
+            position: fixed; 
+            top: 0; 
+            left: 0;
+            width: 100%;
+            z-index: 1000; 
+            transition: all 0.3s ease;
+        }
+
+        /* UPDATED: Mobile Scroll-away logic */
+        @media (max-width: 768px) {
+            .sticky-header.menu-open { 
+                position: absolute; /* Changes to absolute so it scrolls with page when open */
+            }
+        }
+
+        #site-loader {
+            transition: opacity 0.7s ease-in-out;
+        }
+        body.loading-active {
+            overflow: hidden;
+        }
+
+        #cookie-banner {
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(20px);
+            opacity: 0;
+            pointer-events: none;
+        }
+        #cookie-banner.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sticky-header > div:first-child {
+            position: relative;
+            z-index: 1001; 
+        }
+
+        nav.bg-black-rich {
+            position: relative;
+            z-index: 1000; 
+        }
+
+        .dropdown-menu {
+            z-index: 2000;
+        }
+
+        .nested-menu {
+            z-index: 2100;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="loading-active">
+    <div id="site-loader" class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center">
+        <div class="relative flex flex-col items-center">
+            <img src="{% static 'images/absl.png' %}" alt="ABS Logo" class="h-32 w-auto mb-8 animate-pulse">
+            <div class="text-gold tracking-[0.2em] font-light uppercase text-sm mb-4">Loading...</div>
+            <div class="w-48 h-[2px] bg-gray-800 rounded-full overflow-hidden">
+                <div id="loader-progress" class="h-full bg-gold w-0 transition-all duration-[3000ms] ease-out"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cookie-banner" class="hidden fixed bottom-4 inset-x-0 px-4 md:left-auto md:right-10 md:inset-x-auto md:w-96 z-[10000]">
+        <div class="bg-black-rich border border-gold/40 p-5 md:p-6 shadow-2xl rounded-sm">
+            <div class="flex flex-col md:flex-row items-start gap-4 mb-5">
+                <div class="bg-gold/10 p-2.5 rounded shrink-0">
+                    <i class="fas fa-cookie-bite text-gold text-xl md:text-lg"></i>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-xs uppercase tracking-[0.2em] mb-2">Privacy Notice</h5>
+                    <p class="text-gray-400 text-[11px] md:text-[10px] leading-relaxed">
+                        Accra Business School uses cookies to enhance your experience and analyze site traffic. By continuing, you agree to our use of cookies.
+                    </p>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row gap-3">
+                <button id="accept-cookies" class="w-full md:flex-1 bg-gold text-black text-[11px] md:text-[10px] font-bold py-3 md:py-2.5 uppercase hover:bg-white transition duration-300">
+                    Accept All
+                </button>
+                <button id="close-cookie-banner" class="w-full md:w-auto px-6 py-3 md:py-0 border border-white/10 text-gray-400 text-[11px] md:text-[10px] hover:text-white transition uppercase md:normal-case">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <form id="logout-form" action="{% url 'logout' %}" method="POST" style="display: none;">
+        {% csrf_token %}
+    </form>
+
+    <header class="sticky-header" id="main-header">
+        <div class="bg-black-rich border-b border-white/10 text-white text-[11px] font-semibold py-2">
+            <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <a href="tel:+233263888555" class="hover:text-gold transition flex items-center gap-1.5">
+                        <i class="fas fa-phone-alt text-[10px]"></i> +233 263 888 555
+                    </a>
+                    <a href="mailto:info@abs.edu.gh" class="hover:text-gold transition flex items-center gap-1.5">
+                        <i class="fas fa-envelope text-[10px]"></i> info@abs.edu.gh
+                    </a>
+                    <div class="flex items-center gap-3 ml-2">
+                        <a href="#" class="hover:text-gold transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-gold transition"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-6 tracking-wider">
+                    {% if not user.is_authenticated %}
+                        <div class="relative dropdown-group cursor-pointer flex items-center gap-1 uppercase hover:text-gold h-full py-2">
+                            Staff <i class="fas fa-chevron-down text-[8px]"></i>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-content">
+                                    <a href="https://login.microsoftonline.com" target="_blank" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Staff Email</a>
+                                    <a href="#" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Library Login</a>
+                                    <a href="{% url 'registry' %}" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Registry Login</a>
+                                    <a href="https://www.turnitin.com/" target="_blank" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Plagiarism Detector</a>
+                                    <a href="#" class="dropdown-item px-6 py-3">Learning Portal Login</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative dropdown-group cursor-pointer flex items-center gap-1 uppercase hover:text-gold h-full py-2">
+                            Student <i class="fas fa-chevron-down text-[8px]"></i>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-content">
+                                    <div class="nested-dropdown">
+                                        <div class="dropdown-item px-6 py-3 border-b border-gray-800/50 flex justify-between items-center">
+                                             <i class="fas fa-chevron-left text-[8px]"></i> Student requests
+                                        </div>
+                                        <div class="nested-menu">
+                                            <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Transcript</a>
+                                            <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Recommendation letter</a>
+                                            <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="dropdown-item px-6 py-3 border-b border-gray-800/50">English proficiency letter</a>
+                                            <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="dropdown-item px-6 py-3 border-b border-gray-800/50">True copies of certificates</a>
+                                            <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Internship support letter</a>
+                                            <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Resident permit letter</a>
+                                            <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Attestation/Introductory letter</a>
+                                            <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="dropdown-item px-6 py-3">Introductory letter for project support</a>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="dropdown-item px-6 py-3 border-b border-gray-800/50">ABS souvenir shop</a>
+                                    <a href="#" class="dropdown-item px-6 py-3">Congregation galleries</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="relative dropdown-group cursor-pointer flex items-center gap-1 uppercase text-gold-interactive h-full py-2">
+                            Room Reservation <i class="fas fa-chevron-down text-[8px]"></i>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-content">
+                                    <a href="{% url 'programs:study_room_reservation' %}" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Student Login / Booking</a>
+                                    <a href="{% url 'programs:staff_room_dashboard' %}" class="dropdown-item px-6 py-3">Staff Login / Dashboard</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <span class="text-gold uppercase font-bold text-[10px]">
+                            <i class="fas fa-user-circle"></i> {{ user.username }}
+                        </span>
+                        <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();" class="text-red-500 uppercase font-bold text-[10px]">Logout</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <nav class="bg-black-rich text-white border-b border-gray-800 h-[72px] flex items-center relative">
+            <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+                <a href="{% if not user.is_authenticated %}{% url 'home' %}{% else %}#{% endif %}" class="text-xl md:text-2xl font-bold tracking-tighter">
+                    ACCRA <span class="illuminate-gold">BUSINESS</span> SCHOOL
+                </a>
+
+                <div class="hidden md:flex space-x-6 items-center font-semibold text-sm uppercase tracking-widest">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'home' %}" class="nav-link transition py-2">Home</a>
+                        <div class="relative dropdown-group">
+                            <button class="nav-link transition py-2 flex items-center gap-1 uppercase outline-none">
+                                About Us <i class="fas fa-chevron-down text-[10px]"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-content">
+                                    <a href="{% url 'programs:president_message' %}" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Message from the President</a>
+                                    <a href="{% url 'programs:governing_council' %}" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Governing Council</a>
+                                    <a href="#" class="dropdown-item px-6 py-3 border-b border-gray-800/50">International Advisory Board</a>
+                                    <a href="{% url 'programs:about_abs' %}" class="dropdown-item px-6 py-3 border-b border-gray-800/50">Accra Business School</a>
+                                    <a href="{% url 'programs:accreditation' %}" class="dropdown-item px-6 py-3">Accreditation</a>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url 'programs:program_list' %}" class="nav-link transition py-2">Programmes</a>
+                        <a href="{% url 'programs:contact' %}" class="nav-link transition py-2">Contact</a>
+                        <a href="https://ugc.edu.gh/apply-now/" target="_blank" rel="noopener noreferrer" class="bg-gold text-black px-5 py-2 hover:bg-white transition">Apply Now</a>
+                    {% else %}
+                        <div class="flex items-center gap-12">
+                            <div class="flex flex-col items-start leading-tight">
+                                <span class="text-gold text-[10px] font-bold tracking-[0.3em] animate-pulse">SECURE SESSION ACTIVE</span>
+                                <span class="text-white text-xs opacity-70 uppercase tracking-widest">
+                                    {% if user.is_staff %}Staff Portal Administrator{% else %}Student Reservation System{% endif %}
+                                </span>
+                            </div>
+                            <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();" 
+                               class="bg-red-600/10 border border-red-600/40 text-red-500 px-8 py-2.5 hover:bg-red-600 hover:text-white transition text-[11px] font-black tracking-widest">
+                                <i class="fas fa-power-off mr-2"></i> EXIT PORTAL / LOGOUT
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button id="mobile-toggle" class="md:hidden text-gold text-2xl focus:outline-none">
+                    <i class="fas fa-bars" id="toggle-icon"></i>
+                </button>
+            </div>
+
+            <div id="mobile-menu" class="md:hidden">
+                <div class="flex flex-col px-6 py-8 space-y-6 font-semibold text-sm uppercase tracking-widest pb-12">
+                    {% if not user.is_authenticated %}
+                        <div class="flex flex-col space-y-4 pb-4 border-b border-white/10">
+                            <div>
+                                <button id="mobile-staff-toggle" class="w-full flex justify-between items-center text-gold text-xs outline-none">
+                                    <span>STAFF</span>
+                                    <i class="fas fa-chevron-down text-[8px] rotate-arrow" id="staff-arrow"></i>
+                                </button>
+                                <div id="staff-submenu" class="mobile-submenu flex flex-col space-y-4 mt-4 px-4 border-l border-gold/30">
+                                    <a href="#" class="text-gray-400 hover:text-gold transition text-[10px] pt-2">Staff Email</a>
+                                    <a href="#" class="text-gray-400 hover:text-gold transition text-[10px]">Library Login</a>
+                                    <a href="#" class="text-gray-400 hover:text-gold transition text-[10px]">Registry Login</a>
+                                    <a href="#" class="text-gray-400 hover:text-gold transition text-[10px]">Plagiarism Detector</a>
+                                    <a href="#" class="text-gray-400 hover:text-gold transition text-[10px]">Learning Portal Login</a>
+                                </div>
+                            </div>
+                            <div>
+                                <button id="mobile-student-toggle" class="w-full flex justify-between items-center text-gold text-xs outline-none">
+                                    <span>STUDENT</span>
+                                    <i class="fas fa-chevron-down text-[8px] rotate-arrow" id="student-arrow"></i>
+                                </button>
+                                <div id="student-submenu" class="mobile-submenu flex flex-col space-y-4 mt-4 px-4 border-l border-gold/30">
+                                    <a href="#" class="text-gray-400 hover:text-gold transition text-[10px] pt-2">Course registration</a>
+                                    <a href="#" class="text-gray-400 hover:text-gold transition text-[10px]">Learning resources</a>
+                                    
+                                    <div class="flex flex-col space-y-2 mt-2 ml-2 border-l border-gray-700 pl-4">
+                                        <span class="text-white text-[9px] mb-2 opacity-50">REQUEST TYPES</span>
+                                        <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gold transition text-[10px]">Transcript</a>
+                                        <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gold transition text-[10px]">Recommendation letter</a>
+                                        <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gold transition text-[10px]">English proficiency letter</a>
+                                        <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gold transition text-[10px]">True copies of certificates</a>
+                                        <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gold transition text-[10px]">Internship support letter</a>
+                                        <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gold transition text-[10px]">Resident permit letter</a>
+                                        <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gold transition text-[10px]">Attestation/Introductory letter</a>
+                                        <a href="https://student-request.ugc.edu.gh/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gold transition text-[10px]">Project support letter</a>
+                                    </div>
+
+                                    <a href="#" class="text-gray-400 hover:text-gold transition text-[10px]">ABS souvenir shop</a>
+                                    <a href="#" class="text-gray-400 hover:text-gold transition text-[10px]">Congregation galleries</a>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <button id="mobile-room-toggle" class="w-full flex justify-between items-center text-gold text-xs outline-none uppercase font-bold">
+                                    <span>Room Reservation</span>
+                                    <i class="fas fa-chevron-down text-[8px] rotate-arrow" id="room-arrow"></i>
+                                </button>
+                                <div id="room-submenu" class="mobile-submenu flex flex-col space-y-4 mt-4 px-4 border-l border-gold/30">
+                                    <a href="{% url 'programs:study_room_reservation' %}" class="text-gray-400 hover:text-gold transition text-[10px] pt-2">STUDENT LOGIN / BOOKING</a>
+                                    <a href="{% url 'programs:staff_room_dashboard' %}" class="text-gray-400 hover:text-gold transition text-[10px]">STAFF LOGIN / DASHBOARD</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="{% url 'home' %}" class="text-white hover:text-gold transition">Home</a>
+                        
+                        <div>
+                            <button id="mobile-about-toggle" class="w-full flex justify-between items-center text-white hover:text-gold transition outline-none">
+                                <span>About Us</span>
+                                <i class="fas fa-chevron-down text-sm text-gold rotate-arrow" id="about-arrow"></i>
+                            </button>
+                            <div id="about-submenu" class="mobile-submenu flex flex-col space-y-4 mt-4 px-4 border-l border-gold/30">
+                                <a href="{% url 'programs:president_message' %}" class="text-gray-400 hover:text-gold transition text-xs pt-2">Message from the President</a>
+                                <a href="{% url 'programs:governing_council' %}" class="text-gray-400 hover:text-gold transition text-xs">Governing Council</a>
+                                <a href="#" class="text-gray-400 hover:text-gold transition text-xs">International Advisory Board</a>
+                                <a href="{% url 'programs:about_abs' %}" class="text-gray-400 hover:text-gold transition text-xs">Accra Business School</a>
+                                <a href="{% url 'programs:accreditation' %}" class="text-gray-400 hover:text-gold transition text-xs">Accreditation</a>
+                            </div>
+                        </div>
+
+                        <a href="{% url 'programs:program_list' %}" class="text-white hover:text-gold transition">Programmes</a>
+                        <a href="https://ugc.edu.gh/apply-now/" target="_blank" rel="noopener noreferrer" class="bg-gold text-black text-center py-4 mt-4 hover:bg-white transition">Apply Now</a>
+                    {% else %}
+                        <div class="text-center pb-6 border-b border-white/10">
+                            <div class="text-gold text-[10px] font-black tracking-[0.4em] mb-2">PORTAL SECURITY ACTIVE</div>
+                            <div class="text-white text-xl font-black">{{ user.username }}</div>
+                        </div>
+                        <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();" 
+                           class="text-red-500 text-center py-5 border border-red-500/30 font-black bg-red-500/5 tracking-widest">
+                            <i class="fas fa-sign-out-alt mr-2"></i> EXIT AND RETURN TO SITE
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="bg-black-rich text-white pt-24 pb-8 border-t border-gold/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-12 mb-16">
+                <div data-aos="fade-up">
+                    <h4 class="text-xl font-bold mb-6 text-gold">Contact Us</h4>
+                    <div class="space-y-4 text-gray-400 text-sm">
+                        <p class="font-bold text-white">Accra <span class="illuminate-gold">BUSINESS</span> School</p>
+                        <p>Spintex-RD, Christ Square</p>
+                        <p>PMB CT 170 Cantoments, Accra-Ghana</p>
+                        <p>info@abs.edu.gh</p>
+                        <p>+233 263 888 555</p>
+                        <p>+233 263 888 666</p>
+                    </div>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="100">
+                    <h4 class="text-xl font-bold mb-6 text-gold">Resources</h4>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li><a href="#" class="hover:text-gold transition">· Webmail</a></li>
+                        <li><a href="#" class="hover:text-gold transition">· Online Library</a></li>
+                        <li><a href="#" class="hover:text-gold transition">· Student Handbook</a></li>
+                        <li><a href="#" class="hover:text-gold transition">· Plagiarism Policy</a></li>
+                        <li><a href="#" class="hover:text-gold transition">· Institutional Policies</a></li>
+                        <li><a href="#" class="hover:text-gold transition">· Support Desk</a></li>
+                    </ul>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="200" class="flex flex-col items-start">
+                    <h4 class="text-xl font-bold mb-6 text-gold">ABS Socials</h4>
+                    <div class="flex flex-wrap gap-3 mb-10">
+                        <a href="#" class="social-btn bg-gray-900 p-2 rounded w-10 h-10 flex items-center justify-center"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-btn bg-gray-900 p-2 rounded w-10 h-10 flex items-center justify-center"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#" class="social-btn bg-gray-900 p-2 rounded w-10 h-10 flex items-center justify-center"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-btn bg-gray-900 p-2 rounded w-10 h-10 flex items-center justify-center"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-btn bg-gray-900 p-2 rounded w-10 h-10 flex items-center justify-center"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <img src="{% static 'images/1.png' %}" alt="Logo" class="h-20 opacity-50">
+                </div>
+            </div>
+            <div class="pt-8 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-gray-500">
+                <p>&copy; 2026 ACCRA <span class="illuminate-gold">BUSINESS</span> SCHOOL. ALL RIGHTS RESERVED.</p>
+                <p class="mt-4 md:mt-0">Developed by <span class="text-white font-bold">Nana Yaw Kwatia Awuah - 0560708067</span> <span class="animate-beat text-xs">❤️</span></p>
+            </div>
+        </div>
+    </footer>
+    
+    {% include 'partials/up.html' %}
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{% static 'js/loader.js' %}"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+
+        const mainHeader = document.getElementById('main-header');
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const toggleIcon = document.getElementById('toggle-icon');
+        
+        const setupToggle = (btnId, menuId, arrowId) => {
+            const btn = document.getElementById(btnId);
+            const menu = document.getElementById(menuId);
+            const arrow = document.getElementById(arrowId);
+            if (btn && menu) {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    menu.classList.toggle('open');
+                    if(arrow) arrow.classList.toggle('active');
+                });
+            }
+        };
+
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', () => {
+                const isActive = mobileMenu.classList.toggle('active');
+                toggleIcon.classList.toggle('fa-bars');
+                toggleIcon.classList.toggle('fa-times');
+                
+                if (window.innerWidth <= 768) {
+                    if (isActive) {
+                        mainHeader.classList.add('menu-open');
+                    } else {
+                        mainHeader.classList.remove('menu-open');
+                    }
+                }
+            });
+        }
+
+        setupToggle('mobile-about-toggle', 'about-submenu', 'about-arrow');
+        setupToggle('mobile-staff-toggle', 'staff-submenu', 'staff-arrow');
+        setupToggle('mobile-student-toggle', 'student-submenu', 'student-arrow');
+        setupToggle('mobile-room-toggle', 'room-submenu', 'room-arrow');
+    </script>
+</body>
+</html>

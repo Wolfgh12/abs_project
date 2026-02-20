@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us | Accra Business School{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Global Gold Glow Utilities */
+    .text-gold { color: #C5A059; transition: all 0.3s ease; }
+    .bg-gold { background-color: #C5A059; transition: all 0.3s ease; }
+    .bg-black-rich { background-color: #0a0a0a; }
+
+    /* The Glow Effect for headings and laced text */
+    .text-gold:hover {
+        color: #e2c081 !important;
+        text-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+    }
+
+    /* Helpdesk Button Custom Hover */
+    .btn-helpdesk {
+        background-color: #0a0a0a;
+        color: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-helpdesk:hover {
+        background-color: #C5A059;
+        color: #0a0a0a;
+        box-shadow: 0 15px 30px rgba(197, 160, 89, 0.3);
+        transform: translateY(-5px);
+    }
+
+    /* Styling for High Definition Rendering */
+    .sharp-img {
+        image-rendering: -webkit-optimize-contrast; 
+        image-rendering: crisp-edges;
+        filter: contrast(1.05) brightness(1.02);
+        transition: transform 1.5s ease;
+    }
+
+    .image-container:hover .sharp-img {
+        transform: scale(1.05);
+    }
+
+    /* Custom entrance animation */
+    main {
+        opacity: 0;
+        animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Smooth Scroll Behavior */
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="min-h-[80vh] flex flex-col md:flex-row bg-white">
+    <div class="md:w-1/2 relative h-[400px] md:h-auto overflow-hidden image-container">
+        <img src="{% static 'images/st.jpg' %}" 
+             alt="Accra Business School Students" 
+             class="absolute inset-0 w-full h-full object-cover sharp-img"
+             data-aos="fade-right">
+        <div class="absolute inset-0 bg-black/5"></div>
+    </div>
+
+    <div class="md:w-1/2 flex items-center justify-center p-8 md:p-24" data-aos="fade-left">
+        <div class="max-w-md w-full text-center md:text-left">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 text-black-rich uppercase tracking-tighter cursor-default">
+                Get In <span class="text-gold">Touch</span>
+            </h1>
+            
+            <div class="w-20 h-1 bg-gold mb-8 mx-auto md:mx-0"></div>
+            
+            <p class="text-gray-600 text-lg mb-10 leading-relaxed font-light">
+                Our dedicated support team is ready to assist you with admissions, 
+                program inquiries, or technical support. Click below to enter our 
+                official helpdesk portal.
+            </p>
+
+            <div class="space-y-6">
+                <a href="http://127.0.0.1:8001" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="btn-helpdesk inline-flex items-center justify-center gap-3 px-10 py-5 text-xs font-bold uppercase tracking-widest w-full md:w-auto group">
+                    <span>Visit Our Helpdesk</span>
+                    <i class="fas fa-external-link-alt group-hover:rotate-12 transition-transform"></i>
+                </a>
+                
+                <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-medium">
+                    Instant Support & Resource Center
+                </p>
+            </div>
+
+            <div class="mt-16 pt-8 border-t border-gray-100 grid grid-cols-2 gap-8 text-left">
+                <div class="group">
+                    <h4 class="text-[10px] font-bold text-gold uppercase mb-2 tracking-widest transition-all group-hover:tracking-widest group-hover:text-black">Email Us</h4>
+                    <p class="text-sm text-gray-500 font-medium">info@abs.edu.gh</p>
+                </div>
+                <div class="group">
+                    <h4 class="text-[10px] font-bold text-gold uppercase mb-2 tracking-widest transition-all group-hover:tracking-widest group-hover:text-black">Call Us</h4>
+                    <p class="text-sm text-gray-500 font-medium">+233 263 888 555</p>
+                    <p class="text-sm text-gray-500 font-medium">+233 263 888 666</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

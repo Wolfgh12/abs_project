@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Accreditation | Accra Business School{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Global Gold Glow Utilities */
+    .text-gold { color: #C5A059; transition: all 0.3s ease; }
+    .bg-gold { background-color: #C5A059; transition: all 0.3s ease; }
+    .bg-black-rich { background-color: #0a0a0a; }
+
+    /* The Glow Effect for gold-laced texts */
+    .text-gold:hover {
+        color: #e2c081 !important;
+        text-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+    }
+
+    /* Professional Card Hover Logic */
+    .partner-card {
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .partner-card:hover {
+        box-shadow: 0 20px 40px rgba(197, 160, 89, 0.1);
+        border-color: rgba(197, 160, 89, 0.3);
+    }
+
+    .partner-card:hover span {
+        color: #C5A059 !important;
+        text-shadow: 0 0 5px rgba(197, 160, 89, 0.2);
+    }
+
+    /* CTA Button Hover */
+    .btn-outline-dark:hover {
+        background-color: #000 !important;
+        color: #fff !important;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="relative bg-black-rich pt-24 pb-16 overflow-hidden">
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+        <svg viewBox="0 0 1200 300" class="w-full h-full object-cover">
+            <path d="M0,300 L0,200 L50,200 L50,150 L100,150 L100,220 L150,220 L150,100 L250,100 L250,250 L300,250 L300,120 L400,120 L400,300 Z" fill="white"/>
+        </svg>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
+        <h1 class="text-gold text-5xl md:text-7xl font-bold mb-6 tracking-tighter uppercase cursor-default" data-aos="fade-down">
+            Accreditation
+        </h1>
+        <p class="text-white text-xl md:text-2xl font-light max-w-3xl mx-auto italic border-t border-gold/30 pt-6" data-aos="fade-up">
+            "Every great city deserves a great school"
+        </p>
+    </div>
+</div>
+
+<section class="py-20 bg-white">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+        <div class="inline-block bg-gold/10 text-gold px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 cursor-default">
+            Global Recognition
+        </div>
+        <p class="text-gray-700 text-lg md:text-xl leading-relaxed mb-12" data-aos="fade-up">
+            <span class="text-gold font-bold cursor-default">Accra Business School</span> is accredited by the <span class="font-semibold text-black">Ghana Tertiary Education Commission (GTEC)</span> and maintains prestigious affiliation agreements with global giants including 
+            <span class="border-b-2 border-gold/20 hover:border-gold transition-colors">KNUST</span>, 
+            <span class="border-b-2 border-gold/20 hover:border-gold transition-colors">Wrexham University</span>, and 
+            <span class="border-b-2 border-gold/20 hover:border-gold transition-colors">SETU Ireland</span>. Our partnerships ensure that the degrees awarded carry weight and recognition across the globe.
+        </p>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="partner-card group bg-gray-50 p-8 rounded-2xl border border-gray-100 flex flex-col items-center justify-center hover:-translate-y-2 hover:bg-white" data-aos="zoom-in">
+                <img src="{% static 'images/gtec.jpg' %}" alt="GTEC" class="h-24 object-contain mb-4 grayscale group-hover:grayscale-0 transition duration-500">
+                <span class="text-[10px] text-center font-bold text-gray-400 uppercase tracking-tighter transition-colors">Ghana Tertiary Education Commission</span>
+            </div>
+
+            <div class="partner-card group bg-gray-50 p-8 rounded-2xl border border-gray-100 flex flex-col items-center justify-center hover:-translate-y-2 hover:bg-white" data-aos="zoom-in" data-aos-delay="100">
+                <img src="{% static 'images/knust.jpg' %}" alt="KNUST" class="h-24 object-contain mb-4 grayscale group-hover:grayscale-0 transition duration-500">
+                <span class="text-[10px] text-center font-bold text-gray-400 uppercase tracking-tighter transition-colors">KNUST - Affiliation</span>
+            </div>
+
+            <div class="partner-card group bg-gray-50 p-8 rounded-2xl border border-gray-100 flex flex-col items-center justify-center hover:-translate-y-2 hover:bg-white" data-aos="zoom-in" data-aos-delay="200">
+                <img src="{% static 'images/pri.png' %}" alt="Wrexham" class="h-20 object-contain mb-4 grayscale group-hover:grayscale-0 transition duration-500">
+                <span class="text-[10px] text-center font-bold text-gray-400 uppercase tracking-tighter transition-colors">Wrexham University (UK)</span>
+            </div>
+
+            <div class="partner-card group bg-gray-50 p-8 rounded-2xl border border-gray-100 flex flex-col items-center justify-center hover:-translate-y-2 hover:bg-white" data-aos="zoom-in" data-aos-delay="300">
+                <img src="{% static 'images/set.png' %}" alt="SETU" class="h-20 object-contain mb-4 grayscale group-hover:grayscale-0 transition duration-500">
+                <span class="text-[10px] text-center font-bold text-gray-400 uppercase tracking-tighter transition-colors">SETU Ireland</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+            <div class="flex items-center gap-8 p-8 rounded-xl border border-dashed border-gray-200 hover:border-gold transition duration-300 group" data-aos="fade-right">
+                <img src="{% static 'images/asic.png' %}" alt="ASIC" class="h-24 w-auto object-contain shrink-0 group-hover:scale-110 transition duration-300">
+                <div>
+                    <h4 class="font-bold text-base group-hover:text-gold transition-colors">ASIC UK</h4>
+                    <p class="text-[11px] text-gray-500 leading-tight">Accreditation Service for International Colleges</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-8 p-8 rounded-xl border border-dashed border-gray-200 hover:border-gold transition duration-300 group" data-aos="fade-up">
+                <img src="{% static 'images/athe.png' %}" alt="ATHE" class="h-20 w-auto object-contain shrink-0 group-hover:scale-110 transition duration-300">
+                <div>
+                    <h4 class="font-bold text-base group-hover:text-gold transition-colors">ATHE UK</h4>
+                    <p class="text-[11px] text-gray-500 leading-tight">Awards for Training and Higher Education</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-8 p-8 rounded-xl border border-dashed border-gray-200 hover:border-gold transition duration-300 group" data-aos="fade-left">
+                <img src="{% static 'images/ifa.png' %}" alt="IFA" class="h-24 w-auto object-contain shrink-0 group-hover:scale-110 transition duration-300">
+                <div>
+                    <h4 class="font-bold text-base group-hover:text-gold transition-colors">IFA UK</h4>
+                    <p class="text-[11px] text-gray-500 leading-tight">Institute of Financial Accountants</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 bg-gold">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-black mb-8">Ready to join a globally recognized institution?</h2>
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="{% url 'programs:program_list' %}" class="bg-black text-white px-10 py-4 font-bold uppercase tracking-widest hover:bg-white hover:text-black transition duration-300 shadow-xl">
+                View Programmes
+            </a>
+            <a href="{% url 'programs:contact' %}" class="bg-transparent border-2 border-black text-black px-10 py-4 font-bold uppercase tracking-widest btn-outline-dark transition duration-300">
+                Enquire Now
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

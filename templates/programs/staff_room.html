@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Staff Facility Control | ABS{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-white">
+    <section class="relative py-20 bg-slate-900 overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <img src="{% static 'images/ui.jpg' %}" class="w-full h-full object-cover" alt="Background">
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-6 text-center">
+            <span class="text-gold font-bold tracking-[0.3em] uppercase text-[10px] mb-4 block">Administrative Access</span>
+            <h1 class="text-white text-5xl font-serif mb-6">Facility <span class="italic text-gold">Management</span></h1>
+            <p class="text-gray-400 max-w-xl mx-auto text-sm font-light leading-relaxed">
+                Welcome to the ABS Room Control Center. Monitor live reservations, manage student sessions, and oversee facility utility in real-time.
+            </p>
+        </div>
+    </section>
+
+    <section class="py-20 px-6">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <div class="group border border-gray-100 p-10 bg-gray-50 hover:bg-black transition-all duration-500 rounded-sm shadow-sm">
+                    <div class="mb-8">
+                        <i class="fas fa-list-ul text-3xl text-gold"></i>
+                    </div>
+                    <h3 class="text-2xl font-serif mb-4 group-hover:text-white transition-colors">Reservation Logs</h3>
+                    <p class="text-gray-500 text-sm mb-8 leading-relaxed group-hover:text-gray-400">
+                        Access the full database of student bookings. View arrival times, departure times, and student credentials.
+                    </p>
+                    <a href="{% url 'programs:staff_room_bookings' %}" class="inline-block border-b-2 border-gold pb-1 text-[10px] font-bold uppercase tracking-widest text-slate-900 group-hover:text-gold transition-all hover:translate-x-2">
+                        Enter Dashboard <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <div class="group border border-gray-100 p-10 bg-gray-50 hover:bg-black transition-all duration-500 rounded-sm shadow-sm">
+                    <div class="mb-8">
+                        <i class="fas fa-th text-3xl text-gold"></i>
+                    </div>
+                    <h3 class="text-2xl font-serif mb-4 group-hover:text-white transition-colors">Room Status Grid</h3>
+                    <p class="text-gray-500 text-sm mb-8 leading-relaxed group-hover:text-gray-400">
+                        A visual representation of all 70 suites. Check which rooms are currently occupied or available across all floors.
+                    </p>
+                    <a href="{% url 'programs:staff_room_dashboard' %}" class="inline-block border-b-2 border-gold pb-1 text-[10px] font-bold uppercase tracking-widest text-slate-900 group-hover:text-gold transition-all hover:translate-x-2">
+                        View Floor Map <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="mt-20 pt-10 border-t border-gray-100 flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <img src="{% static 'images/logo.png' %}" class="h-8 grayscale opacity-50" alt="ABS Logo">
+                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Authorized Staff Only</span>
+                </div>
+                <div class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                    Accra Business School © 2026
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<style>
+    /* Global Gold Glow Utilities */
+    .text-gold { color: #C5A059; transition: all 0.3s ease; }
+    .bg-gold { background-color: #C5A059; transition: all 0.3s ease; }
+    .bg-black-rich { background-color: #0a0a0a; }
+
+    /* The Glow Effect for gold-laced texts */
+    .text-gold:hover {
+        color: #e2c081 !important;
+        text-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+    }
+
+    /* Form Input Focus Glow */
+    .form-input-focus:focus {
+        border-color: #C5A059 !important;
+        box-shadow: 0 0 12px rgba(197, 160, 89, 0.2);
+    }
+
+    /* Admission Button Custom Hover */
+    .btn-submit-gold {
+        background-color: #0a0a0a;
+        color: white;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-submit-gold:hover {
+        background-color: #C5A059;
+        color: #0a0a0a;
+        box-shadow: 0 10px 20px rgba(197, 160, 89, 0.3);
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="bg-black-rich min-h-screen pt-24 pb-12 text-white">
+    <div class="max-w-4xl mx-auto px-6">
+        <div class="text-center mb-12" data-aos="fade-down">
+            <span class="text-gold font-bold tracking-[0.3em] uppercase text-xs cursor-default">Join the 2026 Cohort</span>
+            <h1 class="text-4xl md:text-6xl font-bold mt-4 mb-6 italic">Apply to <span class="text-gold cursor-default">ABS.</span></h1>
+            <p class="text-gray-400 leading-relaxed font-light">Begin your journey toward global leadership. Please fill out the form below, and our admissions team will contact you within 48 hours.</p>
+        </div>
+
+        <div class="bg-white p-8 md:p-12 shadow-2xl border-t-4 border-gold" data-aos="zoom-in">
+            <form method="POST" class="space-y-6 text-black">
+                {% csrf_token %}
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest mb-2 text-gray-400">Full Name</label>
+                        <input type="text" placeholder="John Doe" class="form-input-focus w-full border-gray-100 border-2 p-3 outline-none transition-all duration-300">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest mb-2 text-gray-400">Email Address</label>
+                        <input type="email" placeholder="john@example.com" class="form-input-focus w-full border-gray-100 border-2 p-3 outline-none transition-all duration-300">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2 text-gray-400">Programme of Interest</label>
+                    <select class="form-input-focus w-full border-gray-100 border-2 p-3 outline-none transition-all duration-300 bg-white">
+                        <option>Postgraduate Diploma in Business Administration</option>
+                        <option>Executive MBA</option>
+                        <option>MSc. Accounting & Finance</option>
+                        <option>CIM / CIPS Professional Courses</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2 text-gray-400">Educational Background</label>
+                    <textarea rows="4" placeholder="Briefly describe your previous qualifications..." class="form-input-focus w-full border-gray-100 border-2 p-3 outline-none transition-all duration-300"></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit-gold w-full font-bold py-5 uppercase tracking-[0.2em] text-xs">
+                    Submit Application
+                </button>
+            </form>
+        </div>
+        
+        <div class="mt-12 text-center text-gray-500 text-[11px] uppercase tracking-widest">
+            <p>Accra Business School is GTEC Accredited. Need help? 
+                <span class="text-gold font-bold cursor-pointer transition-all duration-300 hover:tracking-[0.3em]">Contact the helpdesk</span>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

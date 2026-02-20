@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}Staff Dashboard | ABS Management{% endblock %}
+
+{% block content %}
+<div id="logoutModal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+    <div class="relative flex items-center justify-center min-h-screen px-4">
+        <div class="bg-black-rich border border-gold/30 w-full max-w-md p-8 shadow-2xl shadow-gold/10" data-aos="zoom-in" data-aos-duration="300">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gold/10 border border-gold/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-sign-out-alt text-gold text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-serif text-white mb-2">Confirm Logout</h3>
+                <p class="text-gray-400 text-sm mb-8 uppercase tracking-widest">Are you sure you want to end your session?</p>
+                
+                <div class="flex gap-4">
+                    <button onclick="closeLogoutModal()" class="flex-1 px-6 py-3 border border-gray-700 text-gray-400 font-bold text-xs uppercase hover:bg-gray-800 transition-all">
+                        Stay Logged In
+                    </button>
+                    <button onclick="executeLogout()" class="flex-1 px-6 py-3 bg-gold text-black font-bold text-xs uppercase hover:bg-white transition-all">
+                        Yes, Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="bg-black-rich py-12 border-b border-gold/20">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div>
+                <h1 class="text-3xl font-serif text-white">Programme Management</h1>
+                <div class="flex items-center gap-3 mt-2">
+                    <span class="text-gold text-xs uppercase tracking-widest">Secure Staff Portal</span>
+                    <span class="text-gray-600">|</span>
+                    <span class="text-gray-400 text-xs">Welcome back, <strong>{{ user.username }}</strong></span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <form id="logoutForm" action="{% url 'logout' %}" method="post" class="inline">
+                    {% csrf_token %}
+                    <button type="button" onclick="openLogoutModal()" class="text-gray-400 hover:text-red-500 text-xs font-bold uppercase tracking-widest transition-colors">
+                        <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                    </button>
+                </form>
+
+                <a href="{% url 'programs:add_program' %}" class="bg-gold text-black px-6 py-3 font-bold uppercase tracking-tighter text-xs hover:bg-white transition-all shadow-lg shadow-gold/10">
+                    + Add New Programme
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-12 bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-6">
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-6 p-4 rounded-r-lg {% if message.tags == 'success' %}bg-green-100 text-green-800 border-l-4 border-green-500 shadow-sm{% endif %}">
+                    <i class="fas fa-check-circle mr-2"></i> {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="bg-white shadow-2xl overflow-hidden rounded-sm border border-gray-100">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-100 border-b border-gray-200">
+                        <th class="p-4 text-xs font-bold uppercase tracking-widest text-gray-600">Programme Title</th>
+                        <th class="p-4 text-xs font-bold uppercase tracking-widest text-gray-600">Category</th>
+                        <th class="p-4 text-xs font-bold uppercase tracking-widest text-gray-600 text-center">Status</th>
+                        <th class="p-4 text-xs font-bold uppercase tracking-widest text-gray-600 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for program in programs %}
+                    <tr class="border-b border-gray-50 hover:bg-gold/5 transition-colors group">
+                        <td class="p-4">
+                            <div class="font-bold text-black-rich group-hover:text-gold transition-colors">{{ program.title }}</div>
+                            <div class="text-[10px] text-gray-400 font-mono italic">{{ program.slug }}</div>
+                        </td>
+                        <td class="p-4 text-sm text-gray-600">
+                            <span class="bg-gray-100 px-2 py-1 rounded text-[11px]">{{ program.category.name }}</span>
+                        </td>
+                        <td class="p-4 text-center">
+                            {% if program.is_active %}
+                                <span class="bg-green-100 text-green-700 text-[10px] px-2 py-1 font-bold uppercase rounded-full">Public</span>
+                            {% else %}
+                                <span class="bg-gray-200 text-gray-500 text-[10px] px-2 py-1 font-bold uppercase rounded-full">Hidden</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-4 text-right space-x-3">
+                            <a href="{{ program.get_absolute_url }}" class="text-blue-600 hover:text-blue-800 text-xs font-bold">
+                                <i class="fas fa-external-link-alt"></i> View
+                            </a>
+                            <a href="{% url 'programs:edit_program' program.slug %}" class="text-gold hover:text-black-rich text-xs font-bold">
+                                <i class="fas fa-edit"></i> Edit Details
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="p-20 text-center text-gray-400 italic">
+                            <div class="flex flex-col items-center gap-4">
+                                <i class="fas fa-folder-open text-4xl text-gray-200"></i>
+                                <p>No programmes found. Click "Add New Programme" to begin.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    const modal = document.getElementById('logoutModal');
+    const form = document.getElementById('logoutForm');
+
+    function openLogoutModal() {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+    }
+
+    function closeLogoutModal() {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto'; // Re-enable scrolling
+    }
+
+    function executeLogout() {
+        form.submit();
+    }
+
+    // Close modal if user clicks backdrop
+    window.onclick = function(event) {
+        if (event.target == modal.querySelector('.absolute')) {
+            closeLogoutModal();
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Staff Room Management | ABS{% endblock %}
+
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+{% if messages %}
+<div id="toast-container" class="fixed top-6 right-6 z-[120] space-y-4">
+    {% for message in messages %}
+    <div class="message-toast flex items-center p-4 rounded-lg shadow-2xl border-l-4 transform transition-all duration-700 ease-in-out translate-x-[150%] opacity-0
+        {% if message.tags == 'success' %}bg-white border-green-500 text-slate-800{% else %}bg-white border-red-500 text-slate-800{% endif %}"
+        style="min-width: 320px;">
+        <div class="flex-shrink-0 mr-3">
+            {% if message.tags == 'success' %}
+            <i class="fas fa-check-circle text-green-500 text-xl"></i>
+            {% else %}
+            <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
+            {% endif %}
+        </div>
+        <div class="flex flex-col">
+            <span class="text-[10px] uppercase font-bold text-gray-400 tracking-widest">System Notification</span>
+            <div class="font-bold text-xs uppercase tracking-tight">{{ message }}</div>
+        </div>
+        <button onclick="hideToast(this.parentElement)" class="ml-auto text-gray-300 hover:text-gray-500 transition-colors">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div id="deleteModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden transform transition-all scale-95 opacity-0 duration-300" id="modalContent">
+        <div class="bg-black p-6 text-center">
+            <div class="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-500/20">
+                <i class="fas fa-exclamation-triangle text-2xl animate-pulse"></i>
+            </div>
+            <h3 class="text-xl font-serif text-white uppercase tracking-tighter">Confirm Deletion</h3>
+            <p class="text-gray-400 text-sm mt-2 font-light">This record will be permanently purged from the system logs. Proceed?</p>
+        </div>
+        <div class="p-6 flex gap-3">
+            <button onclick="closeDeleteModal()" class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg font-bold uppercase text-xs tracking-widest hover:bg-gray-200 transition-all">
+                Cancel
+            </button>
+            <form id="modalDeleteForm" method="POST" class="flex-1" onsubmit="showDeleteLoading(this)">
+                {% csrf_token %}
+                <button type="submit" id="confirmDeleteBtn" class="w-full px-4 py-3 bg-red-600 text-white rounded-lg font-bold uppercase text-xs tracking-widest hover:bg-red-700 shadow-lg shadow-red-600/20 transition-all flex items-center justify-center gap-2">
+                    <span id="btnText">Delete Now</span>
+                    <i id="btnIcon" class="fas fa-trash-alt text-[10px]"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="min-h-screen bg-gray-50 pb-20">
+    <div class="bg-black text-white py-12 px-6 mb-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-end">
+            <div>
+                <span class="text-gold font-bold tracking-widest uppercase text-xs">Staff Portal</span>
+                <h1 class="text-4xl font-serif mt-2">Almond Room Reservation <span class="text-gold italic">Logs</span></h1>
+            </div>
+            <div class="text-right">
+                <p class="text-gray-400 text-sm italic">Total Entries</p>
+                <p class="text-3xl font-bold text-gold">{{ bookings.count }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-6 flex flex-col md:flex-row gap-4 items-center justify-between bg-black p-4 rounded-xl shadow-lg border border-gold/20">
+            <div class="relative w-full md:w-96">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gold/50 text-xs"></i>
+                <input type="text" id="logSearch" onkeyup="filterLogs()" placeholder="Search Name, ID, Email or Room..." 
+                       class="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-xs font-bold uppercase tracking-widest text-white focus:outline-none focus:border-gold transition-all">
+            </div>
+            <div class="flex gap-3 w-full md:w-auto">
+                <a href="{% url 'programs:staff_room_dashboard' %}" 
+                   class="flex-1 md:flex-none px-6 py-2.5 bg-white/5 border-2 border-gold text-gold rounded-lg font-bold uppercase text-[10px] tracking-widest hover:bg-white hover:text-black transition-all duration-300 flex items-center justify-center gap-2 animate-pulse-gold">
+                    <i class="fas fa-th-large"></i> Room Availability Dashboard
+                </a>
+
+                <button onclick="exportToExcel()" class="flex-1 md:flex-none px-6 py-2.5 bg-gold text-black rounded-lg font-bold uppercase text-[10px] tracking-widest hover:bg-yellow-500 transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-file-excel"></i> Export to Excel
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-t-lg border-b border-gray-100 flex justify-between items-center">
+            <h2 class="font-bold text-slate-800 uppercase text-xs tracking-tighter flex items-center gap-2">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span> Live Reservation Feed
+            </h2>
+            <div class="flex items-center gap-4">
+                {% if bookings %}
+                <button onclick="openDeleteModal('{% url 'programs:clear_all_bookings' %}', 'System Purge', 'This will permanently delete ALL reservation logs.')" 
+                        class="group flex items-center gap-2 px-3 py-1 border border-red-200 text-red-500 hover:bg-red-500 hover:text-white rounded transition-all duration-200 text-[10px] font-bold uppercase tracking-widest">
+                    <i class="fas fa-trash-alt group-hover:animate-bounce"></i> Purge All Logs
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="bg-white shadow-xl rounded-b-lg overflow-hidden border border-gray-100">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse" id="reservationTable">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-gray-100">
+                            <th class="p-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Student / ID</th>
+                            <th class="p-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Room</th>
+                            <th class="p-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-green-600">Arrival</th>
+                            <th class="p-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-red-600">Departure</th>
+                            <th class="p-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Contact</th>
+                            <th class="p-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        {% for booking in bookings %}
+                        <tr class="hover:bg-slate-50 transition-colors group reservation-row">
+                            <td class="p-4">
+                                <div class="font-bold text-slate-900 text-sm search-target">{{ booking.student_name }}</div>
+                                <div class="text-[10px] text-gold font-mono search-target">{{ booking.student_id }}</div>
+                            </td>
+                            <td class="p-4">
+                                <span class="px-2 py-1 bg-slate-100 rounded text-[10px] font-bold text-slate-700 uppercase tracking-tighter search-target">{{ booking.room.name }}</span>
+                            </td>
+                            <td class="p-4 font-medium text-xs text-slate-800">
+                                {% if " TO " in booking.time_slot %}{{ booking.time_slot|slice:":16" }}{% else %}{{ booking.time_slot }}{% endif %}
+                            </td>
+                            <td class="p-4 font-medium text-xs text-slate-800">
+                                {% if " TO " in booking.time_slot %}{{ booking.time_slot|slice:"20:" }}{% else %}-{% endif %}
+                            </td>
+                            <td class="p-4">
+                                <div class="text-[10px] text-slate-600 font-bold uppercase tracking-tighter search-target">{{ booking.email }}</div>
+                                <div class="text-[10px] text-slate-400 search-target">{{ booking.phone_number }}</div>
+                            </td>
+                            <td class="p-4 text-center">
+                                <button onclick="openDeleteModal('{% url 'programs:delete_single_booking' booking.id %}', 'Delete Entry', 'Remove record for {{ booking.student_name }}?')" 
+                                        class="text-slate-300 hover:text-red-600 transition-all duration-200 transform group-hover:scale-110">
+                                    <i class="fas fa-times-circle text-lg"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="p-20 text-center">
+                                <div class="flex flex-col items-center">
+                                    <i class="fas fa-calendar-times text-4xl text-gray-200 mb-4"></i>
+                                    <p class="text-gray-400 font-serif italic text-sm tracking-widest uppercase">No logs detected</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="mt-6 flex justify-between items-center text-gray-400 text-[10px] uppercase tracking-widest font-bold">
+            <p>© 2026 Accra Business School</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('deleteModal');
+    const content = document.getElementById('modalContent');
+    const deleteForm = document.getElementById('modalDeleteForm');
+
+    // --- LOADER FIX: Force hide global loader on this page ---
+    window.addEventListener('DOMContentLoaded', () => {
+        const globalLoader = document.getElementById('loader') || document.querySelector('.loader-wrapper');
+        if (globalLoader) globalLoader.style.display = 'none';
+    });
+
+    // --- SEARCH FILTER ENGINE ---
+    function filterLogs() {
+        const input = document.getElementById('logSearch').value.toLowerCase();
+        const rows = document.querySelectorAll('.reservation-row');
+        
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(input) ? '' : 'none';
+        });
+    }
+
+    // --- EXCEL EXPORT ENGINE ---
+    function exportToExcel() {
+        const table = document.getElementById('reservationTable');
+        const wb = XLSX.utils.table_to_book(table, { sheet: "Reservations" });
+        XLSX.writeFile(wb, "ABS_Room_Reservations.xlsx");
+    }
+
+    // --- TOAST ANIMATION ENGINE ---
+    function hideToast(toast) {
+        toast.classList.add('translate-x-[150%]', 'opacity-0');
+        setTimeout(() => toast.remove(), 700);
+    }
+
+    window.onload = function() {
+        const toasts = document.querySelectorAll('.message-toast');
+        toasts.forEach((toast, index) => {
+            setTimeout(() => {
+                toast.classList.remove('translate-x-[150%]', 'opacity-0');
+                toast.classList.add('translate-x-0', 'opacity-100');
+            }, 100 * (index + 1));
+            setTimeout(() => hideToast(toast), 5000);
+        });
+    };
+
+    // --- DELETE MODAL ENGINE ---
+    function openDeleteModal(url, title, message) {
+        deleteForm.action = url;
+        if(title) modal.querySelector('h3').innerText = title;
+        if(message) modal.querySelector('p').innerText = message;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeDeleteModal() {
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 300);
+    }
+
+    function showDeleteLoading(form) {
+        const btn = document.getElementById('confirmDeleteBtn');
+        const text = document.getElementById('btnText');
+        const icon = document.getElementById('btnIcon');
+        text.innerText = "Purging...";
+        icon.className = "fas fa-circle-notch fa-spin text-[10px]";
+        btn.disabled = true;
+        btn.classList.add('opacity-70', 'cursor-wait');
+    }
+
+    window.onclick = function(e) { if (e.target == modal) closeDeleteModal(); }
+</script>
+
+<style>
+    @keyframes pulse-gold {
+        0% { 
+            box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.8); 
+            border-color: rgba(212, 175, 55, 1);
+        }
+        70% { 
+            box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); 
+            border-color: rgba(212, 175, 55, 0.6);
+        }
+        100% { 
+            box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); 
+            border-color: rgba(212, 175, 55, 1);
+        }
+    }
+    .animate-pulse-gold { animation: pulse-gold 2s infinite; }
+    
+    #logSearch:focus {
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+</style>
+{% endblock %}

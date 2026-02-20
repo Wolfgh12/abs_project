@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if program %}{{ program.title }}{% else %}Program Not Found{% endif %} | ABS | UGC{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* PROFESSIONAL FAILSAFE: Ensure content is visible even if AOS fails */
+    [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+        visibility: visible !important;
+    }
+
+    /* Only apply animations if AOS is actually initialized and working */
+    html.aos-init [data-aos] {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    html.aos-init [data-aos].aos-animate {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Immediate display for critical components */
+    .program-header, .quick-facts-sidebar {
+        transition: opacity 0.5s ease-in-out;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if program %}
+<section class="program-header bg-black-rich pt-24 pb-16 border-b border-gold/30">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+            <div data-aos="fade-right" data-aos-duration="600" data-aos-once="true">
+                <span class="text-gold font-bold tracking-[0.3em] uppercase text-xs">{{ program.get_level_display }} Portfolio</span>
+                <h1 class="text-4xl md:text-6xl text-white mt-4 font-serif leading-tight">
+                    {{ program.title }}
+                </h1>
+                <div class="flex flex-wrap gap-6 mt-6 text-gray-400 text-sm font-medium tracking-wide">
+                    <span class="flex items-center"><span class="text-gold mr-2 italic">Affiliation:</span> {{ program.affiliation }}</span>
+                    <span class="flex items-center"><span class="text-gold mr-2 italic">Duration:</span> {{ program.duration }}</span>
+                </div>
+            </div>
+            <div data-aos="fade-left" data-aos-duration="600" data-aos-once="true">
+                <a href="{% url 'programs:admission' %}" class="bg-gold text-black px-10 py-4 font-bold uppercase tracking-widest text-xs hover:bg-white transition-all shadow-xl block text-center">
+                    Apply for this Intake
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-3 gap-16">
+        
+        <div class="lg:col-span-2 space-y-12" data-aos="fade-up" data-aos-delay="50">
+            <div>
+                <h2 class="text-3xl font-bold text-black-rich mb-6 border-b-2 border-gold w-fit pb-2">Programme Overview</h2>
+                <div class="text-gray-600 leading-relaxed space-y-4 text-lg font-light">
+                    {{ program.description|linebreaks }}
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="border border-gray-100 p-6 bg-gray-50 group hover:border-gold transition-colors cursor-pointer">
+                    <h3 class="font-bold uppercase tracking-widest text-sm flex justify-between">
+                        Admission Requirements <span>+</span>
+                    </h3>
+                    <div class="mt-4 text-gray-500 text-sm font-light">
+                        Standard ABS requirements include a recognized Bachelor's degree or professional qualification (level 6) plus relevant work experience for MBA pathways.
+                    </div>
+                </div>
+
+                <div class="border border-gray-100 p-6 bg-gray-50 group hover:border-gold transition-colors cursor-pointer">
+                    <h3 class="font-bold uppercase tracking-widest text-sm flex justify-between">
+                        Course Modules <span>+</span>
+                    </h3>
+                    <div class="mt-4 text-gray-500 text-sm font-light">
+                        Core modules cover Strategic Management, Global Marketing, Financial Decision Making, and a final Research Project.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-8">
+            <div class="quick-facts-sidebar bg-black-rich p-8 text-white border-t-4 border-gold shadow-2xl" data-aos="fade-left" data-aos-delay="100">
+                <h4 class="text-gold font-bold uppercase tracking-widest text-xs mb-6">Quick Facts | UGC</h4>
+                <ul class="space-y-6">
+                    <li class="flex justify-between border-b border-gray-800 pb-2">
+                        <span class="text-gray-400 text-xs">Intake</span>
+                        <span class="text-sm font-bold">Jan / May / Sept</span>
+                    </li>
+                    <li class="flex justify-between border-b border-gray-800 pb-2">
+                        <span class="text-gray-400 text-xs">Delivery</span>
+                        <span class="text-sm font-bold">Weekends / Evenings</span>
+                    </li>
+                    <li class="flex justify-between border-b border-gray-800 pb-2">
+                        <span class="text-gray-400 text-xs">Accreditation</span>
+                        <span class="text-sm font-bold">GTEC Ghana</span>
+                    </li>
+                </ul>
+                <button class="w-full mt-8 border border-gold text-gold py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-gold hover:text-black transition">
+                    Inquire via WhatsApp
+                </button>
+            </div>
+
+            <div class="p-8 border border-gray-100 text-center italic text-gray-400 font-serif" data-aos="fade-up">
+                "Developing Africa's leaders through a global outlook and Christian values."
+            </div>
+            
+            <div class="text-center pt-4">
+                <a href="{% url 'programs:program_list' %}" class="text-xs uppercase tracking-widest text-gray-400 hover:text-gold transition font-bold">
+                    &larr; View All Programmes
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="min-h-[70vh] flex items-center justify-center bg-black-rich px-6">
+    <div class="text-center">
+        <div class="mb-8">
+            <i class="fas fa-search text-gold text-6xl opacity-20 mb-4 block"></i>
+            <span class="text-gold font-bold tracking-[0.4em] uppercase text-xs">Selection Error</span>
+        </div>
+        <h2 class="text-3xl md:text-5xl text-white font-serif mb-6">Programme Not Found</h2>
+        <p class="text-gray-400 max-w-md mx-auto mb-10 font-light">The program you are searching for is either no longer available or the link is broken.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'programs:program_list' %}" class="bg-gold text-black px-8 py-4 font-bold uppercase tracking-widest text-xs hover:bg-white transition-all">
+                Browse All Programmes
+            </a>
+            <a href="/" class="border border-white/20 text-white px-8 py-4 font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all">
+                Return to Campus Home
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<script>
+    /**
+     * PROFESSIONAL FIX FOR LOAD DELAYS
+     * 1. Refreshes AOS on total window load.
+     * 2. Sets a timeout to force visibility if AOS hangs.
+     */
+    function initializeProfessionalLoad() {
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 50
+            });
+            AOS.refresh();
+        }
+
+        // FAILSAFE: If elements are still invisible after 1.5s, force them to show.
+        setTimeout(function() {
+            const elements = document.querySelectorAll('[data-aos]');
+            elements.forEach(el => {
+                if (window.getComputedStyle(el).opacity === "0") {
+                    el.style.opacity = "1";
+                    el.style.transform = "none";
+                    console.warn("AOS Failsafe Triggered: Forced element visibility.");
+                }
+            });
+        }, 1500);
+    }
+
+    window.addEventListener('load', initializeProfessionalLoad);
+    
+    // Fix for search bar items not appearing:
+    // Ensures that when search filters run, AOS doesn't keep items hidden.
+    document.addEventListener('keyup', function(e) {
+        if (e.target.id === 'program-search') { // Replace with your actual search input ID
+            if (typeof AOS !== 'undefined') {
+                AOS.refresh();
+            }
+        }
+    });
+</script>
+{% endblock %}

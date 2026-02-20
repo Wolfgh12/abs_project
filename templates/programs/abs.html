@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Accra Business School | Background & Rationale{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Global Gold Glow Utilities (from Index) */
+    .text-gold { color: #C5A059; transition: all 0.3s ease; }
+    .bg-gold { background-color: #C5A059; transition: all 0.3s ease; }
+    .bg-black-rich { background-color: #0a0a0a; }
+
+    /* The Glow Effect for gold-laced texts */
+    .text-gold:hover {
+        color: #e2c081 !important;
+        text-shadow: 0 0 8px rgba(197, 160, 89, 0.4);
+    }
+
+    .bg-dots {
+        background-image: radial-gradient(#C5A059 1px, transparent 1px);
+        background-size: 25px 25px;
+        opacity: 0.1;
+    }
+
+    .text-justify {
+        text-align: justify;
+    }
+
+    /* Enhanced Value Letter Gradient to match Brand Gold */
+    .value-letter {
+        font-family: 'Playfair Display', serif;
+        background: linear-gradient(180deg, #C5A059 0%, #A68545 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .group:hover .value-letter {
+        filter: drop-shadow(0 0 5px rgba(197, 160, 89, 0.5));
+    }
+
+    /* Sidebar Link Hover Effect */
+    .sidebar-link:hover {
+        color: #C5A059 !important;
+        padding-left: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<header class="bg-black-rich py-24 relative overflow-hidden border-b border-gold/20">
+    <div class="absolute inset-0 bg-dots"></div>
+    <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
+        <span class="text-gold font-bold uppercase tracking-[0.3em] text-sm mb-4 block" data-aos="fade-down">Establishment 2004</span>
+        <h1 class="text-5xl md:text-7xl font-bold text-white mb-6">Accra Business <span class="text-gold cursor-default">School</span></h1>
+        <p class="text-gray-400 max-w-2xl mx-auto uppercase tracking-widest text-xs leading-loose">
+            Every great city deserves a great school.
+        </p>
+    </div>
+</header>
+
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid lg:grid-cols-12 gap-16 items-start">
+            
+            <div class="lg:col-span-8" data-aos="fade-right">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="h-1 w-12 bg-gold"></div>
+                    <h2 class="text-3xl font-bold text-black uppercase tracking-tight">Background & Rationale</h2>
+                </div>
+                
+                <div class="space-y-6 text-gray-700 leading-relaxed text-justify text-lg">
+                    <p>
+                        <span class="font-bold text-black">Accra Business School (ABS)</span> is a prestigious Christian Business School accredited to offer a range of globally recognized postgraduate, undergraduate and professional programmes in a Christ-centred scholarly environment that integrates faith and learning. 
+                    </p>
+                    <p>
+                        The institution dates from 2004 when it was founded as a training institution by Bishop Gideon and Lady Olivia Titi-Ofei. It has enjoyed three separate name designations prior to assuming its current name, each reflective of its educational journey. 
+                    </p>
+                    <p>
+                        First, it was founded as the <span class="text-gold font-bold cursor-default">African Centre for Leadership and Human Resource Development (AFRILEAD)</span> to provide quality affordable short-term training to very busy professionals. Second, in 2010 it became the Graduate School of Governance and Leadership to coincide with its expansion into undergraduate programmes. 
+                    </p>
+                    <p>
+                        Our current name — <span class="font-bold text-black border-b-2 border-gold/30">Accra Business School</span> — emphasizes the importance of our location, specialty and specificity of education provision. In less than 20 years, we have established ourselves as one of the most successful providers of private sector higher education in Ghana with a stellar reputation internationally.
+                    </p>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4" data-aos="fade-left">
+                <div class="bg-gray-50 border border-gray-100 p-8 sticky top-32">
+                    <h3 class="text-2xl font-bold text-black mb-8 border-b border-gold/20 pb-4 italic">About Us</h3>
+                    <ul class="space-y-5">
+                        <li><a href="{% url 'programs:president_message' %}" class="sidebar-link flex justify-between items-center text-gray-600 transition group"><span>Message from the President</span> <i class="fas fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100 transition"></i></a></li>
+                        <li><a href="{% url 'programs:governing_council' %}" class="sidebar-link flex justify-between items-center text-gray-600 transition group"><span>Governing Council</span> <i class="fas fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100 transition"></i></a></li>
+                        <li><a href="#" class="sidebar-link flex justify-between items-center text-gray-600 transition group"><span>International Advisory Board</span> <i class="fas fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100 transition"></i></a></li>
+                        <li><a href="{% url 'programs:about_abs' %}" class="flex justify-between items-center text-gold font-bold"><span>Accra Business School</span> <i class="fas fa-chevron-right text-[10px]"></i></a></li>
+                        <li><a href="{% url 'programs:accreditation' %}" class="sidebar-link flex justify-between items-center text-gray-600 transition group"><span>Accreditation</span> <i class="fas fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100 transition"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="py-20 bg-gray-50 border-y border-gray-200">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-3 gap-12">
+            
+            <div class="text-center group" data-aos="fade-up">
+                <div class="w-24 h-24 bg-white border border-gold/20 rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm group-hover:bg-black-rich transition duration-500">
+                    <i class="fas fa-bullseye text-gold text-3xl"></i>
+                </div>
+                <h4 class="text-gold font-bold uppercase tracking-widest text-sm mb-4">Our Mission</h4>
+                <p class="text-gray-600 text-sm leading-relaxed px-4">
+                    To develop a new breed of global business leaders educated to <span class="text-black font-semibold">global standards</span> who can create jobs, increase incomes and reduce poverty in Africa.
+                </p>
+            </div>
+
+            <div class="text-center group" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-24 h-24 bg-white border border-gold/20 rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm group-hover:bg-black-rich transition duration-500">
+                    <i class="fas fa-eye text-gold text-3xl"></i>
+                </div>
+                <h4 class="text-gold font-bold uppercase tracking-widest text-sm mb-4">Our Vision</h4>
+                <p class="text-gray-600 text-sm leading-relaxed px-4">
+                    To be the pre-eminent and the most preferred Christian business school in Africa.
+                </p>
+            </div>
+
+            <div class="text-center group" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-24 h-24 bg-white border border-gold/20 rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm group-hover:bg-black-rich transition duration-500">
+                    <i class="fas fa-gem text-gold text-3xl"></i>
+                </div>
+                <h4 class="text-gold font-bold uppercase tracking-widest text-sm mb-4">Our Core Values</h4>
+                <p class="text-gray-500 text-xs mb-4">Our Core values represent who we are:</p>
+                <div class="flex justify-center gap-1">
+                    <span class="text-2xl font-black value-letter">L.E.A.D.E.R.S</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Submission Successful | Accra Business School{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+    :root {
+        --abs-gold: #C5A059;
+        --abs-black: #0a0a0a;
+    }
+
+    @keyframes shine {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+    }
+
+    .illuminate-gold {
+        background: linear-gradient(90deg, #C5A059, #f5e6ad, #C5A059);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 4s linear infinite;
+        font-weight: 800;
+    }
+
+    /* Success Seal Animation */
+    .success-seal {
+        width: 100px;
+        height: 100px;
+        background: var(--abs-gold);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
+        animation: sealPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes sealPop {
+        0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+        100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+
+    .success-card {
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        border-top: 5px solid var(--abs-gold);
+        transform: translateY(-20px);
+    }
+
+    .btn-outline-gold {
+        border: 1px solid var(--abs-gold);
+        color: var(--abs-black);
+        padding: 0.8rem 2rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+        font-size: 0.75rem;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .btn-outline-gold:hover {
+        background: var(--abs-gold);
+        color: white;
+        box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3);
+    }
+
+    .check-mark {
+        color: white;
+        font-size: 3rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-20">
+    <div class="max-w-2xl w-full text-center">
+        
+        <div class="success-card p-10 md:p-16">
+            <div class="success-seal">
+                <i class="fas fa-check check-mark"></i>
+            </div>
+
+            <h1 class="text-3xl md:text-4xl font-serif mb-4 tracking-widest text-black">
+                REGISTRATION <span class="illuminate-gold">RECEIVED</span>
+            </h1>
+
+            <div class="w-16 h-1 bg-gold mx-auto mb-8"></div>
+
+            <p class="text-gray-600 leading-relaxed mb-8">
+                Thank you for choosing Accra Business School. Your course registration has been successfully logged into our system. 
+                <span class="block mt-4 font-bold text-black uppercase tracking-tighter text-sm">
+                    Our registry is currently validating your proof of payment.
+                </span>
+            </p>
+
+            <div class="bg-gray-50 border border-gray-100 p-6 rounded mb-10 text-left">
+                <h4 class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">Next Steps</h4>
+                <ul class="text-sm text-gray-600 space-y-3">
+                    <li class="flex items-start">
+                        <i class="fas fa-envelope text-gold mt-1 mr-3"></i>
+                        Check your email for a formal acknowledgment.
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-university text-gold mt-1 mr-3"></i>
+                        Verification usually takes 24-48 working hours.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="{% url 'home' %}" class="btn-outline-gold">
+                    Return Home
+                </a>
+                <a href="{% url 'programs:program_list' %}" class="btn-outline-gold">
+                    View Other Programs
+                </a>
+            </div>
+        </div>
+
+        <p class="mt-8 text-gray-400 text-xs uppercase tracking-[3px]">
+            &copy; 2026 Accra Business School | Academic Registry
+        </p>
+    </div>
+</main>
+
+<script>
+    // 2. REINFORCED FIRE LOGIC
+    function launchCelebration() {
+        var end = Date.now() + (2 * 1000); // 2 seconds of celebration
+        var colors = ['#C5A059', '#0a0a0a', '#f5e6ad'];
+
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0, y: 0.6 },
+                colors: colors
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1, y: 0.6 },
+                colors: colors
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
+
+    // Trigger on load
+    window.addEventListener('DOMContentLoaded', launchCelebration);
+    // Fallback for fast redirects
+    launchCelebration();
+</script>
+{% endblock %}

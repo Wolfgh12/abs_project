@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Message from the President | Accra Business School{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Global Gold Glow Utilities (from Index) */
+    .text-gold { color: #C5A059; transition: all 0.3s ease; }
+    .bg-gold { background-color: #C5A059; transition: all 0.3s ease; }
+    .bg-black-rich { background-color: #0a0a0a; }
+
+    /* The Glow Effect for gold-laced texts */
+    .text-gold:hover {
+        color: #e2c081 !important;
+        text-shadow: 0 0 8px rgba(197, 160, 89, 0.4);
+    }
+
+    /* REQUESTED UPDATE: Golden Glow Frame */
+    .gold-frame {
+        position: relative;
+        border: 10px solid #C5A059;
+        padding: 0;
+        line-height: 0;
+        box-shadow: 0 0 20px rgba(197, 160, 89, 0.3); /* Base Glow */
+        transition: all 0.4s ease;
+        animation: goldenGlowPulse 3s infinite alternate; /* Continuous Glow Animation */
+    }
+
+    @keyframes goldenGlowPulse {
+        0% {
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
+            border-color: #C5A059;
+        }
+        100% {
+            box-shadow: 0 0 35px rgba(197, 160, 89, 0.6), 10px 10px 0px rgba(197, 160, 89, 0.1);
+            border-color: #e2c081;
+        }
+    }
+
+    .gold-frame:hover {
+        box-shadow: 0 0 50px rgba(197, 160, 89, 0.8);
+        transform: translate(-5px, -5px);
+        animation: none; /* Stabilize on hover */
+    }
+
+    .text-justify {
+        text-align: justify;
+    }
+
+    /* Fixed Beating Heart Animation from Index */
+    @keyframes heartBeat {
+        0% { transform: scale(1); }
+        14% { transform: scale(1.3); }
+        28% { transform: scale(1); }
+        42% { transform: scale(1.3); }
+        70% { transform: scale(1); }
+    }
+    .animate-beat {
+        display: inline-block;
+        animation: heartBeat 1.5s infinite;
+        color: #ff0000;
+        transform-origin: center;
+    }
+
+    /* Button Hover specifically for the gold button */
+    .btn-gold-hover:hover {
+        background-color: #A68545 !important;
+        box-shadow: 0 0 15px rgba(197, 160, 89, 0.4);
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-12 gap-12 items-start">
+            
+            <div class="md:col-span-4" data-aos="fade-right">
+                <div class="gold-frame">
+                    <img src="{% static 'images/bishop.png' %}" alt="President" class="w-full h-auto">
+                </div>
+                <div class="mt-6 border-l-4 border-gold pl-4">
+                    <h2 class="text-2xl font-bold text-black uppercase">Dr. Bishop Gideon Yoofi Titi-Ofei.</h2>
+                    <p class="text-gold font-semibold text-sm uppercase tracking-widest cursor-default">President & Chancellor (University of Gold Coast)</p>
+                </div>
+            </div>
+
+            <div class="md:col-span-8" data-aos="fade-left">
+                <h1 class="text-4xl md:text-5xl font-bold text-black mb-8">Message from the <span class="text-gold cursor-default">President</span></h1>
+                
+                <div class="space-y-6 text-gray-800 leading-relaxed text-lg text-justify">
+                    <p>
+                        Welcome to the Accra Business School, a prestigious institution dedicated to the development of the next generation of global business leaders. Our mission is to provide an education that is not only academically rigorous but also deeply practical and grounded in the realities of the modern business world.
+                    </p>
+                    
+                    <p>
+                        We believe that leadership is a service, and at ABS, we strive to instill in our students a sense of responsibility to their communities and the continent of Africa. Our unique curriculum combines high-level theory with hands-on experience, ensuring that our graduates are ready to hit the ground running.
+                    </p>
+
+                    <blockquote class="bg-gray-50 border-l-4 border-gold p-6 my-8 italic text-xl font-serif text-black">
+                        "Our goal is to redefine business education in Africa by creating a platform where vision meets strategy and leadership meets integrity."
+                    </blockquote>
+
+                    <p>
+                        Whether you are an aspiring entrepreneur or a seasoned professional looking to sharpen your skills, Accra Business School offers a diverse range of programmes designed to meet your needs. I invite you to join us on this journey of transformation and excellence.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-black-rich py-12">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+        <h2 class="text-white text-2xl font-bold">Ready to lead the future of business <span class="animate-beat">❤</span>?</h2>
+        <a href="https://ugc.edu.gh/apply-now/" target="_blank" class="bg-gold text-black px-10 py-4 font-bold uppercase tracking-widest text-xs btn-gold-hover transition duration-300">Apply Now</a>
+    </div>
+</section>
+{% endblock %}

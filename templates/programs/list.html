@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+
+{% block title %}Academic Programmes | Accra Business School | UGC{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Global Gold Glow Utilities */
+    .text-gold { color: #C5A059; transition: all 0.3s ease; }
+    .bg-gold { background-color: #C5A059; transition: all 0.3s ease; }
+    .bg-black-rich { background-color: #0a0a0a; }
+
+    /* The Glow Effect for titles and laced text */
+    .text-gold:hover, .group:hover .group-hover\:text-gold {
+        color: #e2c081 !important;
+        text-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+    }
+
+    /* Sticky Nav Button Logic */
+    .nav-tab {
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    .nav-tab:after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #C5A059;
+        transition: width 0.3s ease;
+    }
+    .nav-tab:hover:after, .nav-tab.active:after {
+        width: 100%;
+    }
+
+    /* Program Card Enhancements */
+    .program-card {
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    .program-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 25px 50px -12px rgba(197, 160, 89, 0.15);
+        border-color: rgba(197, 160, 89, 0.3);
+    }
+
+    /* Explore Button Animation */
+    .explore-btn {
+        background: #f9fafb;
+        transition: all 0.4s ease;
+    }
+    .program-card:hover .explore-btn {
+        background: #C5A059;
+        color: #0a0a0a;
+        box-shadow: 0 -10px 20px rgba(197, 160, 89, 0.1);
+    }
+
+    /* Sophisticated Search Styling */
+    .search-container {
+        position: relative;
+        max-width: 600px;
+        margin: 2rem auto 0;
+    }
+    .search-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(197, 160, 89, 0.3);
+        padding: 1rem 1.5rem 1rem 3rem;
+        border-radius: 99px;
+        color: white;
+        transition: all 0.3s ease;
+        outline: none;
+    }
+    .search-input:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #C5A059;
+        box-shadow: 0 0 20px rgba(197, 160, 89, 0.2);
+    }
+    .search-icon {
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #C5A059;
+        pointer-events: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="bg-black-rich py-20 border-b border-gold/30">
+    <div class="max-w-7xl mx-auto px-6 text-center" data-aos="fade-down">
+        <span class="text-gold font-semibold tracking-[0.3em] uppercase text-xs italic cursor-default">Academic Portfolio</span>
+        <h1 class="text-5xl md:text-6xl text-white mt-4 font-serif">World-Class <span class="text-gold cursor-default">Qualifications</span></h1>
+        <p class="text-gray-400 mt-6 max-w-2xl mx-auto font-light leading-relaxed">
+            Accra Business School offers a range of GTEC accredited and internationally affiliated programmes designed to produce the next generation of global leaders.
+        </p>
+
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="programSearch" placeholder="Search programmes (e.g. MBA, MSc, Professional)..." class="search-input">
+        </div>
+    </div>
+</section>
+
+<div class="bg-white sticky top-[73px] z-40 border-b border-gray-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap justify-center gap-8 text-[10px] font-bold uppercase tracking-widest">
+        <button class="nav-tab text-gold active" data-filter="all">All Programmes</button>
+        <button class="nav-tab text-gray-400 hover:text-black transition" data-filter="postgraduate">Postgraduate</button>
+        <button class="nav-tab text-gray-400 hover:text-black transition" data-filter="professional">Professional</button>
+        <a href="https://qpro.abs.edu.gh/" target="_blank" class="nav-tab text-gray-400 hover:text-black transition">Qualifications for Professionals</a>
+    </div>
+</div>
+
+<section class="py-24 bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-6">
+        <div id="no-results" class="hidden text-center py-20">
+            <div class="mb-4 text-gold opacity-30"><i class="fas fa-search text-6xl"></i></div>
+            <p class="text-gray-400 italic font-serif">No programmes match your search criteria.</p>
+        </div>
+
+        <div id="program-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {% for program in programs %}
+            <div class="program-card group bg-white overflow-hidden flex flex-col" 
+                 data-category="{{ program.level }}" 
+                 data-parent-category="{{ program.category.slug }}"
+                 data-aos="fade-up">
+                
+                <div class="p-8 flex-grow">
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="bg-black-rich text-gold text-[9px] px-3 py-1 font-bold uppercase tracking-tighter">
+                            {{ program.get_level_display }}
+                        </span>
+                        <span class="text-gray-300 font-serif italic text-xs">UGC | ABS</span>
+                    </div>
+                    
+                    <h3 class="program-title text-2xl font-bold text-black-rich mb-4 group-hover:text-gold transition-colors duration-300">
+                        {{ program.title }}
+                    </h3>
+                    
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6 font-light">
+                        {{ program.description|truncatewords:25 }}
+                    </p>
+                    
+                    <div class="space-y-3 border-t border-gray-50 pt-6">
+                        {% if program.affiliation %}
+                        <div class="flex items-center text-[10px] font-bold text-gray-400 uppercase tracking-widest group-hover:text-gray-600 transition-colors">
+                            <span class="w-1.5 h-1.5 bg-gold rounded-full mr-3 group-hover:shadow-[0_0_5px_#C5A059]"></span>
+                            Affiliation: {{ program.affiliation }}
+                        </div>
+                        {% endif %}
+
+                        <div class="flex items-center text-[10px] font-bold text-gray-400 uppercase tracking-widest group-hover:text-gray-600 transition-colors">
+                            <span class="w-1.5 h-1.5 bg-gold rounded-full mr-3 group-hover:shadow-[0_0_5px_#C5A059]"></span>
+                            Duration: {{ program.duration }}
+                        </div>
+                    </div>
+                </div>
+                
+               <a href="{{ program.get_absolute_url }}" 
+   class="explore-btn text-black-rich p-5 text-center font-bold text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2"
+   {% if program.external_url %}target="_blank"{% endif %}>
+    Explore Programme <i class="fas fa-arrow-right text-[8px] transition-transform group-hover:translate-x-2"></i>
+</a>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-20">
+                <div class="mb-4 text-gold opacity-30"><i class="fas fa-graduation-cap text-6xl"></i></div>
+                <p class="text-gray-400 italic">No programmes currently available. Please check back later.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.nav-tab[data-filter]');
+    const allNavItems = document.querySelectorAll('.nav-tab');
+    const cards = document.querySelectorAll('.program-card');
+    const searchInput = document.getElementById('programSearch');
+    const noResults = document.getElementById('no-results');
+
+    let currentFilter = 'all';
+
+    function filterPrograms() {
+        const searchTerm = searchInput.value.toLowerCase();
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const levelCategory = card.getAttribute('data-category');
+            const parentCategory = card.getAttribute('data-parent-category');
+            const title = card.querySelector('.program-title').textContent.toLowerCase();
+            
+            // Check if matches Filter AND Search
+            const matchesFilter = (currentFilter === 'all' || levelCategory === currentFilter || parentCategory === currentFilter);
+            const matchesSearch = title.includes(searchTerm);
+
+            if (matchesFilter && matchesSearch) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Toggle No Results Message
+        noResults.style.display = (visibleCount === 0) ? 'block' : 'none';
+    }
+
+    // Tab Filter Listener
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            currentFilter = tab.getAttribute('data-filter');
+
+            // Update UI
+            allNavItems.forEach(t => {
+                t.classList.remove('text-gold', 'active');
+                t.classList.add('text-gray-400');
+            });
+            tab.classList.add('text-gold', 'active');
+            tab.classList.remove('text-gray-400');
+
+            filterPrograms();
+        });
+    });
+
+    // Search Input Listener
+    searchInput.addEventListener('input', filterPrograms);
+});
+</script>
+{% endblock %}

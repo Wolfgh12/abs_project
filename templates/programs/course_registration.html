@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Course Registration | Accra Business School{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* 1. EXACT GOLD ILLUMINATION & GLOW LOGIC FROM INDEX */
+    :root {
+        --abs-gold: #C5A059;
+        --abs-black: #0a0a0a;
+    }
+
+    /* The "Shimmer" Animation */
+    @keyframes shine {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+    }
+
+    .illuminate-gold {
+        background: linear-gradient(90deg, #C5A059, #f5e6ad, #C5A059);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 4s linear infinite;
+        text-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
+        display: inline-block;
+    }
+
+    /* The "Glow Up" Hover from Index */
+    .text-gold-glow:hover {
+        color: #e2c081 !important;
+        text-shadow: 0 0 8px rgba(197, 160, 89, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    /* 2. CORE PAGE STYLING */
+    .reg-hero {
+        background: linear-gradient(to right, #b79a64, #8e774d);
+        height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .reg-hero-content h1 {
+        color: white;
+        font-family: 'serif';
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        font-weight: 300;
+    }
+
+    .reg-hero-content b {
+        font-weight: 800;
+    }
+
+    .registration-card {
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        margin-top: -60px;
+        position: relative;
+        z-index: 10;
+        border-bottom: 4px solid var(--abs-gold);
+    }
+
+    .form-label {
+        color: var(--abs-black);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+        display: block;
+        transition: all 0.3s ease;
+    }
+
+    .form-label:hover {
+        color: #C5A059;
+        text-shadow: 0 0 8px rgba(197, 160, 89, 0.3);
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: #f9f9f9;
+        border: 1px solid #eee;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--abs-gold);
+        background: white;
+        box-shadow: 0 0 10px rgba(197, 160, 89, 0.1);
+    }
+
+    .btn-submit {
+        background: var(--abs-black);
+        color: white;
+        padding: 1rem 2rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        transition: all 0.4s ease;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-submit:hover {
+        background: var(--abs-gold) !important;
+        color: #0a0a0a !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
+    }
+
+    .radio-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: #555;
+    }
+
+    .radio-container input {
+        margin-right: 10px;
+        accent-color: var(--abs-gold);
+    }
+
+    .money-btn::-webkit-file-upload-button {
+        cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='20'>💰</text></svg>"), pointer !important;
+    }
+    
+    .money-btn::file-selector-button {
+        cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='20'>💰</text></svg>"), pointer !important;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-up {
+        animation: fadeInUp 0.8s ease forwards;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="min-h-screen bg-gray-50 pb-20">
+    
+    <section class="reg-hero">
+        <div class="reg-hero-content text-center">
+            <h1><b class="illuminate-gold">COURSE</b> REGISTRATION</h1>
+            <div class="w-12 h-1 bg-white/30 mx-auto mt-2"></div>
+        </div>
+    </section>
+
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto registration-card p-8 md:p-12 animate-up">
+            
+            <div class="mb-10 text-center md:text-left">
+                <p class="text-gray-500 text-sm italic leading-relaxed">
+                    Complete form to register for programme course(s). You will require a proof of fee payment to complete registration. 
+                    <span class="block font-bold text-black mt-1">NB: Registration will be considered <span class="text-gold-glow illuminate-gold" style="cursor:default; font-weight: 800;">PENDING</span> until payment is validated.</span>
+                </p>
+            </div>
+
+            <form action="{% url 'programs:course_registration' %}" method="POST" enctype="multipart/form-data" class="space-y-8">
+                {% csrf_token %}
+
+                <div>
+                    <label class="form-label text-gold-glow">Full Name <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="text" name="first_name" placeholder="First Name" required class="form-input">
+                        <input type="text" name="middle_name" placeholder="Middle Name" class="form-input">
+                        <input type="text" name="last_name" placeholder="Last Name" required class="form-input">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="form-label text-gold-glow">Email Address <span class="text-red-500">*</span></label>
+                        <input type="email" name="email" placeholder="e.g. student@abs.edu.gh" required class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label text-gold-glow">Phone Number / ID <span class="text-red-500">*</span></label>
+                        <input type="text" name="phone_number" placeholder="Enter Phone or ID" required class="form-input">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="form-label text-gold-glow">Select Programme <span class="text-red-500">*</span></label>
+                    <select name="program" required class="form-input cursor-pointer">
+                        <option value="">Select your course</option>
+                        {% for prog in programs %}
+                            <option value="{{ prog.id }}">{{ prog.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label text-gold-glow">Registration Type <span class="text-red-500">*</span></label>
+                    <div class="mt-2 space-y-2">
+                        <label class="radio-container">
+                            <input type="radio" name="reg_type" value="regular" checked> Regular
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="reg_type" value="resit"> Resit / Re-take
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="form-label text-gold-glow">Select Month of Study <span class="text-red-500">*</span></label>
+                    <select name="study_month" required class="form-input cursor-pointer">
+                        <option value="">Select Month</option>
+                        <option value="january">January</option>
+                        <option value="february">February</option>
+                        <option value="march">March</option>
+                        <option value="april">April</option>
+                        <option value="may">May</option>
+                        <option value="june">June</option>
+                        <option value="july">July</option>
+                        <option value="august">August</option>
+                        <option value="september">September</option>
+                        <option value="october">October</option>
+                        <option value="november">November</option>
+                        <option value="december">December</option>
+                    </select>
+                </div>
+
+                <div class="bg-gray-50 p-6 border-2 border-dashed border-gray-200 rounded text-center">
+                    <label class="form-label text-gold-glow mb-4">Upload Proof of Payment</label>
+                    <input type="file" name="payment_file" required class="money-btn block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-sm file:border-0
+                        file:text-xs file:font-bold
+                        file:bg-black file:text-white
+                        hover:file:bg-gold transition-all">
+                    <p class="text-[10px] text-gray-400 mt-4 uppercase tracking-widest">JPG, PNG or PDF (Max 2MB)</p>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="btn-submit">
+                        Submit Registration <i class="fas fa-chevron-right ml-2 text-[10px]"></i>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</main>
+{% endblock %}

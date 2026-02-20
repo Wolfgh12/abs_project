@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Study Room Reservation | ABS{% endblock %}
+
+{% block extra_head %}
+<style>
+    :root {
+        --abs-gold: #b79a64;
+        --abs-gold-light: #e2c081;
+        --abs-black: #0a0a0a;
+    }
+
+    .rr-hero {
+        background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url("{% static 'images/ui.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        height: 40vh;
+    }
+
+    .room-grid-container {
+        padding-top: 10px;
+    }
+
+    .room-card {
+        background: #ffffff;
+        border: 1px solid #eee;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .room-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        border-color: var(--abs-gold);
+    }
+
+    .room-image-container {
+        position: relative;
+        overflow: hidden;
+        height: 160px;
+    }
+
+    .room-image-container img {
+        transition: transform 0.8s ease;
+    }
+
+    .room-card:hover .room-image-container img {
+        transform: scale(1.1);
+    }
+
+    .status-badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.6rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        z-index: 10;
+    }
+
+    .badge-available { background: #dcfce7; color: #166534; }
+    .badge-occupied { background: #fee2e2; color: #991b1b; }
+
+    .booking-sidebar {
+        position: sticky;
+        top: 100px;
+    }
+
+    .floor-tab {
+        transition: all 0.3s ease;
+        border-bottom: 2px solid transparent;
+    }
+    .floor-tab.active {
+        color: var(--abs-gold);
+        border-color: var(--abs-gold);
+    }
+
+    /* Custom styles for datetime inputs */
+    input[type="datetime-local"] {
+        appearance: none;
+        -webkit-appearance: none;
+        color: #0f172a;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="rr-hero flex items-center justify-center text-center px-6">
+    <div data-aos="fade-up">
+        <span class="text-gold font-bold tracking-[0.4em] uppercase text-xs mb-4 block">Academic Excellence</span>
+        <h1 class="text-white text-5xl md:text-6xl font-serif mb-4">Almond Room <span class="italic text-gold">Reservations</span></h1>
+        <p class="text-gray-300 max-w-2xl mx-auto font-light">Complete access to all 70 premium suites.</p>
+    </div>
+</section>
+
+{% if messages %}
+<div class="max-w-7xl mx-auto px-6 mt-8">
+    {% for message in messages %}
+    <div class="p-4 mb-4 text-sm rounded-lg {% if message.tags == 'success' %}bg-green-100 text-green-800 border border-green-200{% else %}bg-red-100 text-red-800 border border-red-200{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<section class="py-16 bg-gray-50">
+    <div class="max-w-[1600px] mx-auto px-6">
+        
+        <div class="mb-10 bg-white border-l-4 border-gold shadow-sm p-5 flex items-center gap-4" data-aos="fade-right">
+            <div class="flex-shrink-0 w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center">
+                <i class="fas fa-clock text-gold animate-pulse"></i>
+            </div>
+            <div>
+                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gold mb-1">Schedule Protocol</p>
+                <p class="text-xs font-bold text-slate-800 uppercase tracking-widest">
+                    Important: Please stick to your arrival and departure times to ensure smooth transitions.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex flex-col xl:flex-row gap-10">
+            
+            <div class="xl:w-3/4">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl font-serif text-slate-900">Room Inventory</h2>
+                        <p class="text-gray-500 text-sm mt-1">Showing all {{ rooms.count }} Suites</p>
+                    </div>
+                    <div class="flex gap-6 text-[10px] font-bold uppercase tracking-[0.2em]">
+                        <button class="floor-tab active py-2">Full Directory</button>
+                    </div>
+                </div>
+
+                <div class="room-grid-container">
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {% for room in rooms %}
+                        <div class="room-card group {% if not room.is_available %}opacity-75{% endif %}" data-aos="fade-up">
+                            <div class="room-image-container">
+                                {% if room.is_available %}
+                                    <span class="status-badge badge-available">Available</span>
+                                {% else %}
+                                    <span class="status-badge badge-occupied">Occupied</span>
+                                {% endif %}
+                                <img src="{% if forloop.counter|divisibleby:3 %}{% static 'images/library.jpg' %}{% else %}{% static 'images/students.jpg' %}{% endif %}" alt="{{ room.name }}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-5">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-lg font-bold text-slate-900">{{ room.name }}</h3>
+                                    <span class="text-[9px] bg-slate-100 px-2 py-1 rounded text-slate-500 font-bold uppercase tracking-tighter">Floor {% if forloop.counter <= 25 %}1{% elif forloop.counter <= 50 %}2{% else %}3{% endif %}</span>
+                                </div>
+                                <p class="text-gray-500 text-xs mb-4 line-clamp-2">Premium ergonomic workspace with 4K display.</p>
+                                <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"><i class="fas fa-users mr-1"></i> 4-6 Pax</span>
+                                    
+                                    {% if room.is_available %}
+                                        <button type="button" class="select-room-btn text-gold font-bold text-[10px] uppercase tracking-widest hover:text-black transition-colors" data-room-name="{{ room.name }}">Select Room</button>
+                                    {% else %}
+                                        <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest">Reserved</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-center col-span-3 py-10 text-gray-400">No rooms found.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="xl:w-1/4">
+                <div class="booking-sidebar bg-white shadow-2xl p-8 border-t-4 border-gold" data-aos="fade-left">
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-serif text-slate-900">Reservation</h3>
+                        <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest font-bold">Set Your Schedule</p>
+                    </div>
+                    
+                    <form method="POST" action="{% url 'programs:study_room_reservation' %}" class="space-y-6">
+                        {% csrf_token %}
+                        
+                        <div>
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-2">Current Selection</label>
+                            <input type="text" id="selected-room-display" name="room_name" readonly value="Click a room card" class="w-full bg-gray-50 border border-gray-200 p-3 rounded-sm font-bold text-slate-900 text-sm outline-none" required>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-2">Arrival (Date & Time)</label>
+                            <input type="datetime-local" name="arrival_datetime" id="arrival_datetime" required class="w-full border border-gray-200 p-3 rounded-sm focus:border-gold text-sm outline-none transition">
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-2">Departure (Date & Time)</label>
+                            <input type="datetime-local" name="departure_datetime" id="departure_datetime" required class="w-full border border-gray-200 p-3 rounded-sm focus:border-gold text-sm outline-none transition">
+                        </div>
+
+                        <div id="duration-preview" class="hidden bg-slate-50 p-3 border-l-2 border-gold">
+                            <p class="text-[10px] text-slate-500 uppercase font-bold tracking-tight">Total Duration</p>
+                            <p id="total-hours" class="text-sm font-serif italic text-slate-900">0 hours</p>
+                        </div>
+
+                        <button type="submit" class="w-full bg-black text-white py-4 font-bold uppercase tracking-widest text-xs hover:bg-gold hover:text-black transition-all duration-300 transform active:scale-95 shadow-lg">
+                            Confirm Reservation
+                        </button>
+                    </form>
+                    
+                    <div class="mt-8 pt-6 border-t border-gray-100 text-center">
+                        <p class="text-[9px] text-gray-400 leading-relaxed">
+                            <i class="fas fa-clock mr-1 text-gold"></i> 
+                            Please adhere to your departure time.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    // Handle Room Selection
+    document.querySelectorAll('.select-room-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const roomName = this.getAttribute('data-room-name');
+            document.getElementById('selected-room-display').value = roomName;
+            
+            document.querySelectorAll('.room-card').forEach(card => {
+                card.style.borderColor = '#eee';
+                card.style.background = '#fff';
+            });
+            const card = this.closest('.room-card');
+            card.style.borderColor = '#b79a64';
+            card.style.background = '#fffaf0';
+        });
+    });
+
+    // Handle Duration Calculation for multi-day/time
+    const arrivalInput = document.getElementById('arrival_datetime');
+    const departureInput = document.getElementById('departure_datetime');
+    const preview = document.getElementById('duration-preview');
+    const hoursDisplay = document.getElementById('total-hours');
+
+    function calculateDuration() {
+        if (arrivalInput.value && departureInput.value) {
+            const start = new Date(arrivalInput.value);
+            const end = new Date(departureInput.value);
+            
+            let diffMs = (end - start);
+            let diffHrs = diffMs / (1000 * 60 * 60);
+
+            if (diffHrs > 0) {
+                preview.classList.remove('hidden');
+                
+                if (diffHrs >= 24) {
+                    const days = Math.floor(diffHrs / 24);
+                    const remainingHrs = diffHrs % 24;
+                    hoursDisplay.innerText = `${days} Day(s) and ${remainingHrs.toFixed(1)} Hour(s)`;
+                } else {
+                    hoursDisplay.innerText = `${diffHrs.toFixed(1)} Hours Estimated`;
+                }
+            } else {
+                preview.classList.add('hidden');
+            }
+        }
+    }
+
+    arrivalInput.addEventListener('change', calculateDuration);
+    departureInput.addEventListener('change', calculateDuration);
+</script>
+{% endblock %}

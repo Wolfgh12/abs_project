@@ -1,0 +1,476 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="shortcut icon" type="image/png" href="{% static 'images/absl.png' %}">
+<link rel="icon" type="image/png" href="{% static 'images/absl.png' %}">
+<style>
+    /* Progress Circle Animation */
+    .progress-ring__circle {
+        transition: stroke-dashoffset 2s ease-out;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+    }
+    .bg-black-rich { background-color: #0a0a0a; }
+    .text-gold { color: #C5A059; }
+    .border-gold { border-color: #C5A059; }
+    .bg-gold { background-color: #C5A059; }
+    
+    /* Ensure Nav stays on top during scroll */
+    nav { z-index: 1000 !important; }
+
+    /* Custom style for Testimonial Quote */
+    .testimonial-card {
+        border-left: 4px solid #C5A059;
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Process Card Styling */
+    .process-card {
+        background: white;
+        padding: 2rem;
+        border-top: 3px solid #C5A059;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    /* FIXED BEATING HEART ANIMATION */
+    @keyframes heartBeat {
+        0% { transform: scale(1); }
+        14% { transform: scale(1.3); }
+        28% { transform: scale(1); }
+        42% { transform: scale(1.3); }
+        70% { transform: scale(1); }
+    }
+    .animate-beat {
+        display: inline-block;
+        animation: heartBeat 1.5s infinite;
+        color: #ff0000;
+        transform-origin: center;
+    }
+
+    .bg-gold:hover {
+        background-color: #A68545 !important;
+        transition: background-color 0.3s ease;
+    }
+
+    .text-gold:hover {
+        color: #e2c081 !important;
+        text-shadow: 0 0 8px rgba(197, 160, 89, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    .border-gold:hover {
+        background-color: #C5A059 !important;
+        color: #0a0a0a !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="relative bg-black-rich min-h-[90vh] flex items-center text-white pt-10 pb-16 md:pb-0">
+   <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+    <div data-aos="fade-right">
+        <div class="mb-8">
+            <a href="/" class="inline-block hover:opacity-100 transition-opacity group">
+    <img src="{% static 'images/1.png' %}" alt="Accra Business School Logo" 
+         class="h-32 w-auto object-contain logo-glow-enhanced"
+         style="filter: drop-shadow(0 0 8px rgba(197, 160, 89, 0.5)) 
+                        drop-shadow(0 0 20px rgba(197, 160, 89, 0.3));">
+</a>
+
+<style>
+    @keyframes logo-pulse {
+        0%, 100% { 
+            filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.6)) 
+                    drop-shadow(0 0 25px rgba(197, 160, 89, 0.3)); 
+        }
+        50% { 
+            filter: drop-shadow(0 0 18px rgba(197, 160, 89, 0.8)) 
+                    drop-shadow(0 0 35px rgba(197, 160, 89, 0.5)); 
+        }
+    }
+    .logo-glow-enhanced {
+        animation: logo-pulse 4s ease-in-out infinite;
+        transition: all 0.3s ease;
+    }
+    /* Extra kick when hovering */
+    .group:hover .logo-glow-enhanced {
+        filter: drop-shadow(0 0 20px rgba(197, 160, 89, 0.9)) 
+                drop-shadow(0 0 40px rgba(197, 160, 89, 0.6)) !important;
+        transform: scale(1.02);
+    }
+</style>
+        </div>
+
+            <span class="text-gold font-semibold tracking-widest uppercase text-sm">Accra Business School | UGC — GTEC Accredited</span>
+            <h1 class="text-5xl md:text-7xl mb-6 mt-2 tracking-tighter">Learn from the <span class="text-gold">Best</span> to Lead the Rest.</h1>
+            <p class="text-xl text-gray-400 mb-6 leading-relaxed">Accra Business School is a prestigious Christian Business School commended by the President of the Republic of Ghana as a "noble institution." We provide world-class management education to train leaders for Africa.</p>
+            
+            <div class="h-10 mb-8 flex items-center">
+                <span id="typing-text" class="text-gold text-lg md:text-xl font-medium italic border-r-2 border-gold pr-2 min-h-[1.5em]"></span>
+            </div>
+
+            <div class="flex items-center gap-6 pb-12">
+                <a href="{% url 'programs:program_list' %}" class="flex-1 md:flex-none text-center bg-gold text-black px-4 md:px-8 py-4 font-bold hover:scale-105 transition transform inline-block uppercase tracking-widest text-[10px] md:text-xs">Our Programmes</a>
+                
+                <a href="javascript:void(0);" 
+                   onclick="document.getElementById('why-abs').scrollIntoView({behavior: 'smooth'});"
+                   class="flex items-center justify-center w-12 h-12 border border-gold rounded-full text-gold hover:bg-gold hover:text-white transition-all duration-300 animate-bounce group">
+                    <i class="fas fa-chevron-down text-sm group-hover:scale-110 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="relative -mt-8 md:mt-0" data-aos="zoom-in">
+            <div class="border-8 border-gold p-2">
+                <div id="hero-carousel" class="bg-gray-800 h-80 md:h-[550px] flex items-center justify-center text-gold italic relative overflow-hidden">
+                    <img src="{% static 'images/images.jpg' %}" alt="ABS Academic Campus" class="carousel-img absolute inset-0 object-cover w-full h-full transition-opacity duration-1000 opacity-100">
+                    <img src="{% static 'images/wh.jpg' %}" alt="ABS Students" class="carousel-img absolute inset-0 object-cover w-full h-full transition-opacity duration-1000 opacity-0">
+                    <img src="{% static 'images/graduation.jpg' %}" alt="ABS Graduation" class="carousel-img absolute inset-0 object-cover w-full h-full transition-opacity duration-1000 opacity-0">
+                    
+                    <div class="absolute inset-0 bg-black/30"></div>
+                    <span id="carousel-label" class="absolute bottom-4 right-4 bg-black-rich px-4 py-2 text-xs font-bold tracking-widest z-10">ABS ACADEMIC CAMPUS | UGC</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-16 bg-white overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+        
+      <div class="flex flex-wrap justify-center items-center gap-16 md:gap-32 py-10 mb-32 opacity-80 grayscale hover:grayscale-0 transition duration-500" data-aos="zoom-out-up">
+    <img src="{% static 'images/gtec.jpg' %}" alt="Ghana Tertiary Education Commission" class="h-12 md:h-16 object-contain">
+    <img src="{% static 'images/knust.jpg' %}" alt="KNUST" class="h-12 md:h-16 object-contain">
+    <img src="{% static 'images/pri.png' %}" alt="Wrexham University" class="h-10 md:h-14 object-contain">
+    <img src="{% static 'images/set.png' %}" alt="SETU Ireland" class="h-10 md:h-14 object-contain">
+</div>
+
+        <div id="why-abs" class="text-center mb-16" data-aos="fade-down">
+            <p class="text-gold uppercase tracking-[0.3em] text-xs font-bold mb-3">Excellence in Education</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Choose <span class="text-gold">Accra Business School</span></h2>
+            <div class="w-24 h-1 bg-gold mx-auto"></div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            
+            <div class="group p-8 rounded-2xl bg-gray-50 border border-transparent hover:border-gold/30 hover:bg-white hover:shadow-xl transition-all duration-300 text-center" data-aos="flip-left" data-aos-delay="100">
+                <div class="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-money-bill-wave text-3xl text-gold"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 text-gray-900">Affordability</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    As a social enterprise initiative in education, we believe that quality education should be affordable. Choose your own payment plan and enjoy flexible payment terms.
+                </p>
+            </div>
+
+            <div class="group p-8 rounded-2xl bg-gray-50 border border-transparent hover:border-gold/30 hover:bg-white hover:shadow-xl transition-all duration-300 text-center" data-aos="flip-left" data-aos-delay="200">
+                <div class="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-certificate text-3xl text-gold"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 text-gray-900">Accreditation</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    The accreditation status granted by the Ghana Tertiary Education Commission (GTEC) is a mark of credibility and the recognition of our quality assurance practices.
+                </p>
+            </div>
+
+            <div class="group p-8 rounded-2xl bg-gray-50 border border-transparent hover:border-gold/30 hover:bg-white hover:shadow-xl transition-all duration-300 text-center" data-aos="flip-left" data-aos-delay="300">
+                <div class="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-bolt text-3xl text-gold"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 text-gray-900">Agility</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    We are the most innovative business school. So why change your lifestyle when we have changed our programmes to suit your lifestyle? Flexible entry, Flexible learning.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-white overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+        <div class="relative" data-aos="slide-right">
+            <img src="{% static 'images/students.jpg' %}" alt="ABS Students" class="w-full h-[500px] object-cover shadow-2xl">
+        </div>
+        
+        <div data-aos="slide-left">
+            <span class="text-gold font-bold tracking-widest uppercase text-xs">The Difference</span>
+            <h2 class="text-5xl font-bold text-slate-900 mt-2 mb-6">We Are Locally <span class="text-black italic">Global</span></h2>
+
+            <p class="text-gray-600 leading-relaxed mb-6">
+                ABS is an internationally orientated institution one of whose core strategic objectives is to give to Ghanaian and West African students the opportunity to gain prestige international qualifications while remaining at home thus enabling students to continue with established professional and domestic responsibilities.
+                <br><br>
+                We now offer degree and postgraduate courses in Business & Management and Computer Sciences from a UK and an Irish University respectively (all recognized by GTEC) enabling you to gain internationally recognized qualifications at a fraction of the cost that you would incur if you studied in UK or Ireland. We are bringing the world to Ghana
+            </p>
+
+            <div id="stats-container" class="grid grid-cols-3 gap-8">
+                <div class="flex flex-col items-center stat-item" data-percent="83">
+                    <div class="relative flex items-center justify-center">
+                        <svg class="w-24 h-24">
+                            <circle class="text-gray-200" stroke-width="6" stroke="currentColor" fill="transparent" r="40" cx="48" cy="48"/>
+                            <circle class="text-gold progress-ring__circle" stroke-width="6" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="48" cy="48"/>
+                        </svg>
+                        <span class="absolute text-xl font-bold text-slate-800"><span class="count">0</span>%</span>
+                    </div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider mt-3 text-center">Student Skills</span>
+                </div>
+
+                <div class="flex flex-col items-center stat-item" data-percent="87">
+                    <div class="relative flex items-center justify-center">
+                        <svg class="w-24 h-24">
+                            <circle class="text-gray-200" stroke-width="6" stroke="currentColor" fill="transparent" r="40" cx="48" cy="48"/>
+                            <circle class="text-gold progress-ring__circle" stroke-width="6" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="48" cy="48"/>
+                        </svg>
+                        <span class="absolute text-xl font-bold text-slate-800"><span class="count">0</span>%</span>
+                    </div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider mt-3 text-center">Quality Tuition</span>
+                </div>
+
+                <div class="flex flex-col items-center stat-item" data-percent="93">
+                    <div class="relative flex items-center justify-center">
+                        <svg class="w-24 h-24">
+                            <circle class="text-gray-200" stroke-width="6" stroke="currentColor" fill="transparent" r="40" cx="48" cy="48"/>
+                            <circle class="text-gold progress-ring__circle" stroke-width="6" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="48" cy="48"/>
+                        </svg>
+                        <span class="absolute text-xl font-bold text-slate-800"><span class="count">0</span>%</span>
+                    </div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider mt-3 text-center">Industry Experience</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 bg-black-rich text-white relative">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+        <div data-aos="fade-down-right">
+            <span class="text-gold font-bold tracking-[0.3em] uppercase text-xs italic">Our Students</span>
+            <h2 class="text-5xl font-bold mt-2 mb-6 leading-tight">Delivering <span class="text-gold italic">Job Creators</span><br>not Job Seekers</h2>
+            <p class="text-gray-400 leading-relaxed mb-8 text-lg">
+                 SMEs are the engine room of national economic growth, Africa with its bludgeoning youth population needs graduates with not only the entrepreneurial ideas and vision but also with the core skills to set up and run a business successfully thus affording other people the opportunity for employment and a more secure working life. At ABS you will learn the requisite business skills to succeed in the self- employed business environment and become a Job Creator not a Job Seeker
+            </p>
+            <a href="{% url 'programs:program_list' %}" class="inline-block bg-gold text-black px-10 py-4 font-bold uppercase tracking-widest text-xs hover:scale-105 transition duration-300">Find Out More</a>
+        </div>
+        <div class="relative" data-aos="fade-up-left">
+            <img src="{% static 'images/new1.jpg' %}" alt="ABS Students" class="w-full h-[500px] object-cover grayscale hover:grayscale-0 transition duration-700">
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-black-rich border-t border-gold/10">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-start">
+        <div data-aos="zoom-in-right">
+            <span class="text-gold font-bold tracking-widest uppercase text-xs">Testimonials</span>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mt-2 mb-6 leading-tight">Don't just take our word for it, <span class="text-gold italic">see what others are saying</span></h2>
+            
+            <div class="testimonial-card p-8 rounded-lg relative">
+                <p class="text-gray-300 italic mb-6 leading-relaxed">
+                    <span class="text-gold font-bold">ABS</span> has gained grounds and reputation not only in Ghana but Africa as a centre of excellence that over the years has raised men and women of notable repute who continue to serve this country in many distinguished ways.
+                </p>
+                <div class="flex items-center gap-4">
+                    <img src="{% static 'images/fod.jpg' %}" alt="Hon. John Ntim Fordjour" class="w-16 h-16 rounded-full border-2 border-gold object-cover">
+                    <div>
+                        <h4 class="text-white font-bold">Hon. John Ntim Fordjour</h4>
+                        <p class="text-gold text-xs uppercase tracking-widest">Fmr. Deputy Minister of Education</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-900 border border-gold/20 p-10 rounded-xl" data-aos="zoom-in-left">
+            <h3 class="text-2xl font-bold text-white mb-2">Reach Our Admission Advisors</h3>
+            <p class="text-gray-400 mb-8">and gain Admission in <span class="text-gold font-bold">48hrs</span></p>
+            <div class="mb-10">
+                <div class="text-6xl font-black text-white tracking-tighter mb-2">12000 +</div>
+                <div class="text-gold font-bold uppercase tracking-[0.2em] text-sm">Admissions and Counting</div>
+                <div class="w-full h-1 bg-gray-800 mt-4 relative">
+                    <div class="absolute top-0 left-0 h-full bg-gold w-3/4"></div>
+                </div>
+            </div>
+            <a href="http://127.0.0.1:8001" target="_blank"  class="block w-full text-center border-2 border-gold text-gold hover:bg-gold hover:text-black py-4 font-bold uppercase tracking-widest text-sm transition duration-300">Contact Us Now</a>
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+            <div data-aos="fade-right">
+                <span class="text-gold font-bold tracking-widest uppercase text-xs">Corporate Networking</span>
+                <h2 class="text-4xl font-bold text-slate-900 mt-2 mb-6 leading-tight">At <span class="text-gold">ABS</span> you sit in a <span class="italic">Business Class</span></h2>
+                <p class="text-gray-600 mb-8 leading-relaxed">Join and tap from our network of leading Industry Professionals, students and Lecturers who bring industry to the classroom and take the  classroom to industry</p>
+                <a href="https://www.abs.edu.gh/wp-content/uploads/2022/01/ABS-Documentery.mp4" target="_blank" class="flex items-center gap-3 text-black font-bold uppercase tracking-widest text-xs group">
+                    <span class="w-10 h-10 rounded-full border border-black flex items-center justify-center group-hover:bg-black group-hover:text-white transition duration-300">▶</span>
+                    Watch the video
+                </a>
+            </div>
+            <div class="hidden md:block" data-aos="zoom-in-up">
+                <img src="{% static 'images/unnamed.png' %}" alt="Professional Networking" class="w-full h-80 object-cover rounded-lg shadow-xl">
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="process-card" data-aos="slide-up">
+                <span class="text-5xl font-black text-gold/20 block mb-4">01.</span>
+                <h4 class="font-bold text-slate-900 mb-3 uppercase tracking-tight">Tell us about your career pathway</h4>
+                <p class="text-gray-500 text-sm">We get that each student is unique and their requirements are specific.</p>
+            </div>
+            <div class="process-card" data-aos="slide-up" data-aos-delay="100">
+                <span class="text-5xl font-black text-gold/20 block mb-4">02.</span>
+                <h4 class="font-bold text-slate-900 mb-3 uppercase tracking-tight">Speak with an Advisor</h4>
+                <p class="text-gray-500 text-sm">We provide students with Admission advisory services based on their  career progression plans and academic aspirations.</p>
+            </div>
+            <div class="process-card" data-aos="slide-up" data-aos-delay="200">
+                <span class="text-5xl font-black text-gold/20 block mb-4">03.</span>
+                <h4 class="font-bold text-slate-900 mb-3 uppercase tracking-tight">Begin your Journey</h4>
+                <p class="text-gray-500 text-sm">Your Admission advisor will learn about your professional training needs and walk you through the admission process.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-white overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+        
+        <div data-aos="fade-up" data-aos-duration="1000" class="relative">
+            <div class="absolute -left-6 top-0 w-1.5 h-32 bg-gold opacity-40 hidden md:block"></div>
+            
+            <span class="text-gold font-bold tracking-[0.4em] uppercase text-[10px] mb-6 block">Elite Leadership</span>
+            
+            <h2 class="text-4xl md:text-5xl font-serif mb-8 text-slate-900 leading-tight">
+                Academic <span class="italic text-gold">Supremacy</span> 
+                <span class="block text-2xl mt-3 font-sans font-light tracking-[0.2em] text-slate-400 uppercase">Africa's Premier Business School</span>
+            </h2>
+            
+            <p class="text-gray-500 mb-10 leading-relaxed font-light text-lg max-w-xl">
+                Accra Business School is more than an institution; it is a powerful catalyst for economic transformation. We forge visionary thinkers into industry titans through a curriculum that defines the standard for world-class business education.
+            </p>
+            
+            <div class="grid sm:grid-cols-2 gap-6">
+                <div data-aos="fade-up" data-aos-delay="200" class="group p-6 border border-gray-100 bg-gray-50/50 hover:bg-white hover:border-gold/30 transition-all duration-500 shadow-sm hover:shadow-xl">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-8 h-[1px] bg-gold"></div>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-slate-900">Impact</span>
+                    </div>
+                    <p class="text-sm font-semibold text-slate-700 group-hover:text-gold transition-colors leading-snug">The Executive Standard: Developing the definitive leaders of the 21st-century global economy.</p>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="400" class="group p-6 border border-gray-100 bg-gray-50/50 hover:bg-white hover:border-gold/30 transition-all duration-500 shadow-sm hover:shadow-xl">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-8 h-[1px] bg-gold"></div>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-slate-900">Pedigree</span>
+                    </div>
+                    <p class="text-sm font-semibold text-slate-700 group-hover:text-gold transition-colors leading-snug">Globally recognized credentials backed by GTEC, Category A International educational bodies, and UGC.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative group" data-aos="fade-left" data-aos-duration="1200">
+            <div class="absolute inset-0 bg-slate-900 translate-x-4 translate-y-4 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>
+            
+            <div class="relative bg-gradient-to-br from-[#C5A059] via-[#D4AF37] to-[#B8860B] p-12 md:p-16 text-black flex flex-col items-center text-center">
+                <div class="mb-8 w-20 h-20 border-2 border-black/20 flex items-center justify-center rounded-full">
+                    <i class="fas fa-crown text-3xl opacity-80"></i>
+                </div>
+
+                <h3 class="text-3xl md:text-4xl font-serif font-bold mb-6 tracking-tight">Ignite Your Future</h3>
+                
+                <p class="mb-10 font-medium italic text-black/70 max-w-xs leading-relaxed">
+                    "Empowering the next generation of African leaders to shape global industries."
+                </p>
+                
+                <div class="w-full flex flex-col space-y-4">
+                    <a href="#" class="group relative overflow-hidden bg-black text-white px-10 py-4 font-bold uppercase tracking-widest text-[11px] transition-all hover:pr-12">
+                        <span class="relative z-10">Download Prospectus</span>
+                        <i class="fas fa-file-download absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all"></i>
+                    </a>
+                    
+                    <a href="{% url 'programs:program_list' %}" class="border-2 border-black text-black px-10 py-4 font-bold uppercase tracking-widest text-[11px] hover:bg-black hover:text-[#C5A059] transition-all duration-300">
+                        Begin Your Journey
+                    </a>
+                </div>
+
+                <div class="absolute bottom-4 right-6 opacity-10 font-serif text-4xl italic pointer-events-none">
+                    ABS|UGC
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hero Carousel
+        const images = document.querySelectorAll('.carousel-img');
+        const label = document.getElementById('carousel-label');
+        const labels = ["ABS ACADEMIC CITY | UGC", "WORLD-CLASS FACILITIES", "TRAINING FUTURE LEADERS"];
+        let currentIndex = 0;
+
+        setInterval(() => {
+            if(images.length > 0) {
+                images[currentIndex].classList.replace('opacity-100', 'opacity-0');
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.replace('opacity-0', 'opacity-100');
+                label.textContent = labels[currentIndex];
+            }
+        }, 6000);
+
+        // Typing Effect
+        const typingTarget = document.getElementById('typing-text');
+        const phrases = ["Every great city deserves a great school.", "Student success is our success.", "Learn, Lead, Leverage.", "Learn more to earn more.", "Where leaders of tomorrow study."];
+        let pIdx = 0, cIdx = 0, isDeleting = false;
+
+        function typeEffect() {
+            const currentFullText = phrases[pIdx];
+            typingTarget.textContent = isDeleting ? currentFullText.substring(0, cIdx - 1) : currentFullText.substring(0, cIdx + 1);
+            cIdx = isDeleting ? cIdx - 1 : cIdx + 1;
+            
+            let speed = isDeleting ? 50 : 100;
+            if (!isDeleting && cIdx === currentFullText.length) { isDeleting = true; speed = 2500; }
+            else if (isDeleting && cIdx === 0) { isDeleting = false; pIdx = (pIdx + 1) % phrases.length; speed = 500; }
+            setTimeout(typeEffect, speed);
+        }
+        typeEffect();
+
+        // Stats Animation
+        const statsSection = document.getElementById('stats-container');
+        let animated = false;
+
+        const animateStats = () => {
+            document.querySelectorAll('.stat-item').forEach(item => {
+                const target = parseInt(item.getAttribute('data-percent'));
+                const circle = item.querySelector('.progress-ring__circle');
+                const countText = item.querySelector('.count');
+                const radius = 40;
+                const circumference = 2 * Math.PI * radius;
+
+                // Set initial state
+                circle.style.strokeDasharray = `${circumference} ${circumference}`;
+                circle.style.strokeDashoffset = circumference;
+
+                // Trigger animation after a tiny timeout to ensure CSS registers strokeDasharray
+                setTimeout(() => {
+                    circle.style.strokeDashoffset = circumference - (target / 100) * circumference;
+                }, 10);
+
+                let current = 0;
+                const timer = setInterval(() => {
+                    current++;
+                    countText.innerText = current;
+                    if (current === target) clearInterval(timer);
+                }, 20);
+            });
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !animated) {
+                animateStats();
+                animated = true;
+            }
+        
+        }, { threshold: 0.5 });
+        if(statsSection) observer.observe(statsSection);
+    });
+</script>
+{% endblock %}
